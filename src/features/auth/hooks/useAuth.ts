@@ -6,12 +6,13 @@ import {
   logoutUser,
   //   resetPassword,
   getUserData,
-} from "@/features/auth/auth.api";
+} from "@/features/auth/api/auth.api";
 import { auth } from "@/lib/firebase";
+import { type UserData } from "@/features/auth/types/auth.types";
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(auth.currentUser);
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,15 +35,15 @@ export const useAuth = () => {
     return () => unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, name?: string) => {
+  const signUp = async (name: string, email: string, password: string) => {
     setLoading(true);
     try {
-      const newUser = await registerUser(email, password, name);
+      const newUser = await registerUser(name, email, password);
       const data = await getUserData(newUser.uid);
       setUserData(data);
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -55,8 +56,8 @@ export const useAuth = () => {
       const data = await getUserData(loggedInUser.user.uid);
       setUserData(data);
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
