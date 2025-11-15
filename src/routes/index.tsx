@@ -10,6 +10,13 @@ import Home from "@/pages/Home";
 import Login from "@/features/auth/pages/Login";
 import SignUp from "@/features/auth/pages/SignUp";
 import MainLayout from "@/layouts/MainLayout";
+import RequireAdmin from "./RequireAdmin";
+
+//Admin
+import AdminLayout from "@/layouts/AdminLayout";
+import AdminDashboard from "@/features/admin/pages/AdminDashboard";
+import AdminProducts from "@/features/admin/pages/AdminProducts";
+import AdminOrders from "@/features/admin/pages/AdminOrders";
 // import ResetPassword from "@/features/auth/pages/ResetPassword";
 
 // Product
@@ -28,10 +35,20 @@ export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* 사용자 레이아웃 */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           {/* <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} /> */}
+        </Route>
+
+        {/* 관리자 전용 라우트 묶음 */}
+        <Route element={<RequireAdmin />}>
+          <Route element={<AdminLayout />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/orders" element={<AdminOrders />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
