@@ -19,7 +19,7 @@ const BannerList = ({ slides, interval = 5000 }: Props) => {
   }, [slides.length, interval]);
 
   return (
-    <div className={`banner_wrap banner_bg_${currentIndex}`}>
+    <div className={`content banner_wrap banner_bg_${currentIndex}`}>
       <BannerSlide slide={slides[currentIndex]} />
     </div>
   );
