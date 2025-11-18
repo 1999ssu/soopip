@@ -20,7 +20,8 @@ main {
   display: block;
 }
 
-.icon svg {
+.icon svg,
+img {
   width: 100%;
   height: 100%;
 }
@@ -29,6 +30,7 @@ main {
   padding-top: 100px;
   box-sizing: border-box;
 }
+
 /* flex */
 .flex-row {
   display: flex;
