@@ -7,16 +7,19 @@ import Home from "@/pages/Home";
 // import NotFound from "@/pages/NotFound";
 
 // Auth
-import Login from "@/features/auth/pages/Login";
-import SignUp from "@/features/auth/pages/SignUp";
+// import Login from "@/features/auth/pages/Login";
+// import SignUp from "@/features/auth/pages/SignUp";
 import MainLayout from "@/layouts/MainLayout";
-import RequireAdmin from "./RequireAdmin";
+import RequireAdmin from "../features/admin/components/RequireAdmin";
 
 //Admin
 import AdminLayout from "@/layouts/AdminLayout";
 import AdminDashboard from "@/features/admin/pages/AdminDashboard";
 import AdminProducts from "@/features/admin/pages/AdminProducts";
 import AdminOrders from "@/features/admin/pages/AdminOrders";
+import AdminProductAdd from "@/features/admin/pages/AdminProductAdd";
+import AdminProductList from "@/features/admin/pages/AdminProductList";
+import ProductDetail from "@/features/product/pages/ProductDetail";
 // import ResetPassword from "@/features/auth/pages/ResetPassword";
 
 // Product
@@ -38,18 +41,23 @@ export default function AppRoutes() {
         {/* 사용자 레이아웃 */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="product/:id" element={<ProductDetail />} />
           {/* <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} /> */}
         </Route>
 
         {/* 관리자 전용 라우트 묶음 */}
-        <Route element={<RequireAdmin />}>
-          <Route element={<AdminLayout />}>
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/products" element={<AdminProducts />} />
-            <Route path="/admin/orders" element={<AdminOrders />} />
-          </Route>
+        {/* <Route element={<RequireAdmin />}> */}
+        <Route path="/admin" element={<AdminLayout />}>
+          {/* <Route path="/admin" element={<AdminDashboard />} /> */}
+          {/* <Route path="/admin/products" element={<AdminProducts />} /> */}
+          <Route path="/admin/products/list" element={<AdminProductList />} />
+
+          <Route path="/admin/products/add" element={<AdminProductAdd />} />
+
+          <Route path="/admin/orders" element={<AdminOrders />} />
         </Route>
+        {/* </Route> */}
       </Routes>
     </BrowserRouter>
   );
