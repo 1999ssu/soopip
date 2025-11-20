@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer/Footer";
 // import Header from "@/components/Header/Header";
 import { Link, Outlet } from "react-router-dom";
+import "@/styles/admin/admin.css";
 
 const AdminLayout = () => {
   return (
