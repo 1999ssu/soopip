@@ -31,7 +31,7 @@ interface Product {
   id: string;
   name: string;
   price: number;
-  imageUrl: string;
+  thumbnailImageUrl: string;
   stock: number;
   isSoldOut: boolean;
 }
@@ -61,7 +61,7 @@ const ProductList = () => {
         {products.map((item) => (
           <BasicCard
             key={item.id}
-            imageUrl={item.imageUrl}
+            thumbnailImageUrl={item.thumbnailImageUrl}
             title={item.name}
             subTitle={`$${item.price}`}
             onClick={() => goToPageByNameWithId(navigate, "product", item.id)}

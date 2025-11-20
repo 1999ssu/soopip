@@ -1,7 +1,7 @@
 import { BasicCardProps } from "./BasicCard.types";
 
 const BasicCard = ({
-  imageUrl,
+  thumbnailImageUrl,
   title,
   subTitle,
   onClick,
@@ -13,7 +13,7 @@ const BasicCard = ({
       onClick={onClick}
     >
       <div className="img_box">
-        <img src={imageUrl} />
+        <img src={thumbnailImageUrl} />
         {children}
       </div>
       <div className="text_wrap flex_column gap_10">

@@ -23,7 +23,7 @@ const AdminProductList = () => {
     }
   }, []);
 
-  const handleDelete = async (id: string, imageUrl: string) => {
+  const handleDelete = async (id: string, thumbnailImageUrl: string) => {
     if (!window.confirm("진짜 삭제할래? 되돌릴 수 없다잉")) return;
 
     try {
@@ -31,7 +31,7 @@ const AdminProductList = () => {
       await deleteDoc(doc(db, "products", id));
 
       // 2️⃣ Storage 이미지 삭제
-      const imageRef = ref(storage, imageUrl);
+      const imageRef = ref(storage, thumbnailImageUrl);
       await deleteObject(imageRef);
 
       // 3️⃣ 로컬 state 업데이트
@@ -67,7 +67,7 @@ const AdminProductList = () => {
             <tr key={p.id}>
               <td className="border p-2 text-center">
                 <img
-                  src={p.imageUrl}
+                  src={p.thumbnailImageUrl}
                   alt={p.name}
                   className="w-16 h-16 object-cover mx-auto rounded"
                 />
@@ -78,7 +78,7 @@ const AdminProductList = () => {
               <td className="border p-2 text-center">{p.category}</td>
               <td className="border p-2 flex justify-center gap-2">
                 <button
-                  onClick={() => handleDelete(p.id, p.imageUrl)}
+                  onClick={() => handleDelete(p.id, p.thumbnailImageUrl)}
                   className="px-2 py-1 bg-red-500 text-white rounded"
                 >
                   삭제
