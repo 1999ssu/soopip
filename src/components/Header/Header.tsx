@@ -6,14 +6,14 @@ const Header = () => {
   return (
     <header className="header_wrap">
       <div className="header">
-        <div className="top flex-row">
+        <div className="top flex flex-row">
           <Link to="/products" className="icon">
             <SearchIcon />
           </Link>
           <div className="logo">
             <Link to="/">Soopip로고자리</Link>
           </div>
-          <div className="flex-row gap-20">
+          <div className="flex flex-row gap-2">
             <Link to="/wish" className="icon">
               <WishIcon />
             </Link>
