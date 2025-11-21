@@ -36,7 +36,7 @@ const ProductForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white shadow rounded">
+    <div className=" mx-auto p-4 bg-white shadow rounded">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <BasicField description="상품 정보를 입력해주세요" fields={fields}>
           <ImageFields

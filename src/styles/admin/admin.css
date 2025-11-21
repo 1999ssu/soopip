@@ -33,3 +33,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+.layout {
+  width: 100%;
+  padding: 0px;
+  box-sizding: border-box;
+}

@@ -4,7 +4,7 @@ import ProductForm from "../components/ProductForm";
 
 const AdminProductAdd = () => {
   return (
-    <div className="max-w-md mx-auto p-4 bg-white shadow rounded">
+    <div className=" mx-auto p-4 bg-white shadow rounded">
       <h2 className="text-xl font-bold mb-4">상품 등록</h2>
       <ProductForm />
     </div>
