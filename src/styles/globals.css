@@ -31,15 +31,22 @@ img {
   box-sizing: border-box;
 }
 
-/* flex */
-.flex-row {
-  display: flex;
-  align-items: center;
+.tabs-trigger[data-state="active"] {
+  @apply border-0 border-solid border-b-2 border-b-black shadow-none;
 }
 
-.gap-10 {
-  gap: 10px;
+/* flex */
+/* .flex-row {
+  display: flex;
+  align-items: center;
+} */
+
+/* .gap-10 { */
+/* gap: 10px;
 }
 .gap-20 {
   gap: 20px;
 }
+.gap-60 {
+  gap: 60px;
+} */

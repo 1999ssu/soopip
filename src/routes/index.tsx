@@ -20,6 +20,7 @@ import AdminOrders from "@/features/admin/pages/AdminOrders";
 import AdminProductAdd from "@/features/admin/pages/AdminProductAdd";
 import AdminProductList from "@/features/admin/pages/AdminProductList";
 import ProductDetail from "@/features/product/pages/ProductDetail";
+import ProductDetailList from "@/features/product/pages/ProductDetailList";
 // import ResetPassword from "@/features/auth/pages/ResetPassword";
 
 // Product
@@ -41,7 +42,7 @@ export default function AppRoutes() {
         {/* 사용자 레이아웃 */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="product/:id" element={<ProductDetail />} />
+          <Route path="product/:id" element={<ProductDetailList />} />
           {/* <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} /> */}
         </Route>
