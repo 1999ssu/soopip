@@ -9,3 +9,11 @@ export const goToPageByNameWithId = (
   const searchParams = query ? `?${new URLSearchParams(query).toString()}` : "";
   navigate(`/${name}/${id}${searchParams}`);
 };
+export const goToPageByName = (
+  navigate: ReturnType<typeof useNavigate>,
+  name: string,
+  query?: Record<string, any>
+) => {
+  const searchParams = query ? `?${new URLSearchParams(query).toString()}` : "";
+  navigate(`/${name}/${searchParams}`);
+};

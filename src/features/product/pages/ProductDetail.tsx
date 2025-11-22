@@ -2,14 +2,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { WishIcon } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
-import { goToPageByNameWithId } from "@/utils/RouterUtil";
+import { goToPageByName } from "@/utils/RouterUtil";
 
-import { useAppDispatch } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { setPrice } from "@/routes/store/productStore";
 import { useProductDetail } from "../hooks/useProductDetail";
 import { ProductImages } from "../components/ProductImages";
 import { ProductQuantity } from "../components/ProductQuantity";
 import ProductInfo from "../components/ProductInfo";
+import { addItem } from "@/routes/store/cartStore";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,8 @@ const ProductDetail = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const quantity = useAppSelector((state) => state.product.quantity);
 
   if (!product) return <div>Loading...</div>;
 
@@ -27,6 +30,24 @@ const ProductDetail = () => {
 
   // 가격 Redux 세팅
   dispatch(setPrice(product.price));
+
+  const handleAddToCart = () => {
+    dispatch(
+      addItem({
+        product: {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          description: product.description,
+          thumbnailImageUrl: product.thumbnailImageUrl, // Product 타입에 thumbnail 추가 필요
+        },
+        quantity: quantity, // 선택한 수량
+      })
+    );
+
+    // 카트 페이지로 이동
+    goToPageByName(navigate, "cart");
+  };
 
   return (
     <div>
@@ -57,9 +78,7 @@ const ProductDetail = () => {
 
               <Button
                 className="w-full h-full bg-black text-white hover:bg-black"
-                onClick={() =>
-                  goToPageByNameWithId(navigate, "product/cart", id)
-                }
+                onClick={handleAddToCart}
               >
                 ADD TO CART
               </Button>
