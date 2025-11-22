@@ -21,6 +21,7 @@ import AdminProductAdd from "@/features/admin/pages/AdminProductAdd";
 import AdminProductList from "@/features/admin/pages/AdminProductList";
 import ProductDetail from "@/features/product/pages/ProductDetail";
 import ProductDetailList from "@/features/product/pages/ProductDetailList";
+import CartList from "@/features/cart/pages/CartList";
 // import ResetPassword from "@/features/auth/pages/ResetPassword";
 
 // Product
@@ -43,6 +44,7 @@ export default function AppRoutes() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="product/:id" element={<ProductDetailList />} />
+          <Route path="product/cart/:id" element={<CartList />} />
           {/* <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} /> */}
         </Route>
