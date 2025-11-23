@@ -39,7 +39,6 @@ interface Product {
 const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const navigate = useNavigate();
-
   useEffect(() => {
     // products 컬렉션 실시간 구독
     const unsub = onSnapshot(collection(db, "products"), (snapshot) => {
@@ -53,7 +52,6 @@ const ProductList = () => {
     // 컴포넌트 언마운트 시 구독 해제
     return () => unsub();
   }, []);
-
   return (
     <div className="content">
       <h2>상품들</h2>
@@ -71,7 +69,6 @@ const ProductList = () => {
                 className="icon"
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log("buttonclick");
                 }}
               >
                 <WishIcon />

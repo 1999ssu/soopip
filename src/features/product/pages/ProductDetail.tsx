@@ -15,9 +15,11 @@ import { addItem } from "@/routes/store/cartStore";
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const product = useProductDetail(id);
-  const [activeTab, setActiveTab] = useState<string | null>(
-    product?.detailImagesUrl[0] || null
-  );
+  const allImages = product
+    ? [product.thumbnailImageUrl, ...(product.detailImagesUrl || [])]
+    : [];
+
+  const [activeTab, setActiveTab] = useState<string | null>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -27,7 +29,7 @@ const ProductDetail = () => {
 
   // 대표 이미지 기본값 설정
   if (!activeTab && product.detailImagesUrl.length > 0) {
-    setActiveTab(product.detailImagesUrl[0]);
+    setActiveTab(allImages[0]);
   }
 
   // 가격 Redux 세팅
@@ -55,7 +57,7 @@ const ProductDetail = () => {
     <div>
       <div className="flex gap-16">
         <ProductImages
-          images={product.detailImagesUrl}
+          images={allImages}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
