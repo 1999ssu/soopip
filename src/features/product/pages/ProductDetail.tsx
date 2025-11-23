@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { WishIcon } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
-import { goToPageByName } from "@/utils/RouterUtil";
+import { goToPageByName, goToPageByNameWithId } from "@/utils/RouterUtil";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { setPrice } from "@/routes/store/productStore";
@@ -15,7 +15,9 @@ import { addItem } from "@/routes/store/cartStore";
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const product = useProductDetail(id);
-  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string | null>(
+    product?.detailImagesUrl[0] || null
+  );
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 

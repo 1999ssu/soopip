@@ -25,7 +25,7 @@ const cartSlice = createSlice({
       state.items = state.items.filter(
         (item) => item.product.id !== product.id
       );
-      state.items.push({ product, quantity });
+      state.items.push({ product, quantity, selected: true });
     },
     increment: (state, action: PayloadAction<string>) => {
       const item = state.items.find((i) => i.product.id === action.payload);
@@ -38,12 +38,34 @@ const cartSlice = createSlice({
     removeItem: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((i) => i.product.id !== action.payload);
     },
+    toggleSelectItem: (state, action: PayloadAction<string>) => {
+      const item = state.items.find((i) => i.product.id === action.payload);
+      if (item) item.selected = !item.selected;
+    },
+    selectAll: (state) => {
+      state.items.forEach((i) => (i.selected = true));
+    },
+    deselectAll: (state) => {
+      state.items.forEach((i) => (i.selected = false));
+    },
+    deleteSelected: (state) => {
+      state.items = state.items.filter((i) => !i.selected);
+    },
     clearCart: (state) => {
       state.items = [];
     },
   },
 });
 
-export const { addItem, increment, decrement, removeItem, clearCart } =
-  cartSlice.actions;
+export const {
+  addItem,
+  increment,
+  decrement,
+  removeItem,
+  toggleSelectItem,
+  selectAll,
+  deselectAll,
+  deleteSelected,
+  clearCart,
+} = cartSlice.actions;
 export default cartSlice.reducer;

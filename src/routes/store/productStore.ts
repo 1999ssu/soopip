@@ -2,12 +2,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ProductState {
+  id: string;
   quantity: number;
   price: number;
   totalPrice: number;
 }
 
 const initialState: ProductState = {
+  id: "",
   quantity: 1,
   price: 0,
   totalPrice: 0,

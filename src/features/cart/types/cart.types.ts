@@ -8,4 +8,5 @@ export interface CartProduct extends OriginalProduct {
 export interface CartItem {
   product: CartProduct; // CartProduct 사용
   quantity: number;
+  selected: boolean;
 }
