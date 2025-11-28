@@ -7,8 +7,8 @@ import Home from "@/pages/Home";
 // import NotFound from "@/pages/NotFound";
 
 // Auth
-// import Login from "@/features/auth/pages/Login";
-// import SignUp from "@/features/auth/pages/SignUp";
+import Login from "@/features/auth/pages/Login";
+import SignUp from "@/features/auth/pages/SignUp";
 import MainLayout from "@/layouts/MainLayout";
 import RequireAdmin from "../features/admin/components/RequireAdmin";
 
@@ -22,6 +22,9 @@ import AdminProductList from "@/features/admin/pages/AdminProductList";
 import ProductDetail from "@/features/product/pages/ProductDetail";
 import ProductDetailList from "@/features/product/pages/ProductDetailList";
 import CartList from "@/features/cart/pages/CartList";
+import CheckoutList from "@/features/checkout/pages/CheckoutList";
+import Success from "@/features/checkout/pages/Success";
+import Cancel from "@/features/checkout/pages/Cancel";
 // import ResetPassword from "@/features/auth/pages/ResetPassword";
 
 // Product
@@ -45,8 +48,11 @@ export default function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="product/:id" element={<ProductDetailList />} />
           <Route path="cart/" element={<CartList />} />
-          {/* <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} /> */}
+          <Route path="/checkout" element={<CheckoutList />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/cancel" element={<Cancel />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
         </Route>
 
         {/* 관리자 전용 라우트 묶음 */}

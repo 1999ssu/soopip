@@ -2,13 +2,23 @@ import * as functions from "firebase-functions";
 import { stripe } from "./stripe";
 import cors from "cors";
 
-const corsHandler = cors({ origin: ["http://localhost:5173"] });
+export { stripeWebhook } from "./webhooks";
+
+const corsHandler = cors({ origin: true });
 
 interface CartItem {
   id: string;
   name: string;
   price: number; // 센트 단위
   quantity: number;
+  imageUrl: string;
+}
+
+interface UserInfo {
+  name: string;
+  email: string;
+  phone?: string;
+  address?: string;
 }
 
 // 모든 origin 허용
@@ -28,27 +38,39 @@ export const createCheckoutSession = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const { items }: { items: CartItem[] } = req.body;
+      const { items, userInfo }: { items: CartItem[]; userInfo: UserInfo } =
+        req.body;
 
       if (!items || items.length === 0) {
         return res.status(400).send("Cart is empty");
       }
 
+      if (!userInfo || !userInfo.email) {
+        return res.status(400).send("User info missing");
+      }
+
       const line_items = items.map((item) => ({
         price_data: {
-          currency: "usd",
+          currency: "cad",
           product_data: {
             name: item.name || "Unknown Product",
+            images: item.imageUrl ? [item.imageUrl] : [],
           },
           unit_amount: Math.floor(item.price), // Stripe는 정수만 허용
         },
+
         quantity: item.quantity,
       }));
-
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         mode: "payment",
         line_items,
+        metadata: {
+          customer_name: userInfo.name,
+          customer_phone: userInfo.phone || "",
+          customer_address: userInfo.address || "",
+          order_items: JSON.stringify(items),
+        },
         success_url: "http://localhost:5173/success",
         cancel_url: "http://localhost:5173/cancel",
       });

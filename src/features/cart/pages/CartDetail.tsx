@@ -13,9 +13,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CartDetail = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const cartItems = useAppSelector((state) => state.cart.items);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
 
@@ -26,7 +28,7 @@ const CartDetail = () => {
   const allSelected =
     cartItems.length > 0 && cartItems.every((item) => item.selected);
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     const selectedItems = cartItems
       .filter((item) => item.selected)
       .map((item) => ({
@@ -34,40 +36,15 @@ const CartDetail = () => {
         name: item.product.name,
         price: Math.floor(item.product.price * 100), // 센트 단위
         quantity: item.quantity,
+        imageUrl: item.product.thumbnailImageUrl,
       }));
 
     if (selectedItems.length === 0) {
       return alert("선택된 상품이 없습니다.");
     }
-
     setLoadingCheckout(true);
-
-    try {
-      const res = await fetch(
-        "https://us-central1-soopip.cloudfunctions.net/createCheckoutSession",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ items: selectedItems }),
-        }
-      );
-      console.log("res::", res);
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || "결제 세션 생성 실패");
-      }
-
-      const data = await res.json();
-
-      if (!data.url) throw new Error("결제 URL이 존재하지 않습니다.");
-
-      window.location.href = data.url;
-    } catch (err: any) {
-      console.error("Checkout Error:", err);
-      alert(err.message || "결제 중 오류 발생");
-    } finally {
-      setLoadingCheckout(false);
-    }
+    // Checkout 페이지로 이동, items state 전달
+    navigate("/checkout", { state: { items: selectedItems } });
   };
 
   if (cartItems.length === 0) return <div>장바구니가 비어 있습니다.</div>;
