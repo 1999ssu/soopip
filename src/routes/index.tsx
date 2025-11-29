@@ -25,6 +25,8 @@ import CartList from "@/features/cart/pages/CartList";
 import CheckoutList from "@/features/checkout/pages/CheckoutList";
 import Success from "@/features/checkout/pages/Success";
 import Cancel from "@/features/checkout/pages/Cancel";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import WishList from "@/features/wish/pages/WishList";
 // import ResetPassword from "@/features/auth/pages/ResetPassword";
 
 // Product
@@ -40,18 +42,28 @@ import Cancel from "@/features/checkout/pages/Cancel";
 // import AuthLayout from "@/layouts/AuthLayout";
 
 export default function AppRoutes() {
+  const { user, loading } = useAuth();
+
+  if (loading) return <div>Loading...</div>;
   return (
     <BrowserRouter>
       <Routes>
         {/* 사용자 레이아웃 */}
         <Route element={<MainLayout />}>
+          {user ? (
+            <Route path="/" element={<Home />} />
+          ) : (
+            <Route path="/login" element={<Login />} />
+          )}
           <Route path="/" element={<Home />} />
           <Route path="product/:id" element={<ProductDetailList />} />
-          <Route path="cart/" element={<CartList />} />
+          <Route path="/cart" element={<CartList />} />
+          <Route path="/wish" element={<WishList />} />
           <Route path="/checkout" element={<CheckoutList />} />
           <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} />
-          <Route path="/login" element={<Login />} />
+
+          {/* <Route path="/login" element={<Login />} /> */}
           <Route path="/signup" element={<SignUp />} />
         </Route>
 

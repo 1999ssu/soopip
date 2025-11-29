@@ -1,7 +1,7 @@
 // src/routes/store/cartStore.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Product } from "@/features/product/types/product.types";
 import { CartItem } from "@/features/cart/types/cart.types";
+import { RootState } from "./index";
 
 // localStorage에서 초기값 불러오기
 const storedCart = localStorage.getItem("cart");
@@ -13,18 +13,16 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addItem: (
-      state,
-      action: PayloadAction<{ product: Product; quantity: number }>
-    ) => {
-      const { product, quantity } = action.payload;
-
-      // 기존 동일 상품 제거 후 새로 담기 (갱신)
-      state.items = state.items.filter(
-        (item) => item.product.id !== product.id
+    addItem: (state, action: PayloadAction<CartItem>) => {
+      // 중복 체크: 기존에 있으면 quantity 증가
+      const existing = state.items.find(
+        (i) => i.product.id === action.payload.product.id
       );
-      state.items.push({ product, quantity, selected: true });
-
+      if (existing) {
+        existing.quantity += action.payload.quantity;
+      } else {
+        state.items.push(action.payload);
+      }
       localStorage.setItem("cart", JSON.stringify(state.items));
     },
     increment: (state, action: PayloadAction<string>) => {
@@ -77,3 +75,7 @@ export const {
   clearCart,
 } = cartSlice.actions;
 export default cartSlice.reducer;
+
+//장바구니 뱃지 갯수 add
+export const selectCartCount = (state: RootState) =>
+  state.cart.items.reduce((sum, item) => sum + item.quantity, 0);

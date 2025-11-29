@@ -1,25 +1,23 @@
-// src/features/cart/pages/CartDetail.tsx
+// src/features/wish/pages/WishDetail.tsx
+import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/hooks/hooks";
-import { formatPrice } from "@/utils/formatPrice";
+import { addItem as addCartItem } from "@/routes/store/cartStore";
 import {
   increment,
   decrement,
   removeItem,
-  deselectAll,
-  selectAll,
-  deleteSelected,
   toggleSelectItem,
-} from "@/routes/store/cartStore";
+  selectAll,
+  deselectAll,
+  deleteSelected,
+} from "@/routes/store/wishStore";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { formatPrice } from "@/utils/formatPrice";
 
-const CartDetail = () => {
+const WishDetail = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const cartItems = useAppSelector((state) => state.cart.items);
-  const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const wishItems = useAppSelector((state) => state.wish.items);
 
   useEffect(() => {
     return () => {
@@ -27,37 +25,34 @@ const CartDetail = () => {
     };
   }, [dispatch]);
 
-  const totalSelectedPrice = cartItems
+  const totalSelectedPrice = wishItems
     .filter((item) => item.selected)
     .reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
   const allSelected =
-    cartItems.length > 0 && cartItems.every((item) => item.selected);
+    wishItems.length > 0 && wishItems.every((item) => item.selected);
 
-  const handleCheckout = () => {
-    const selectedItems = cartItems
-      .filter((item) => item.selected)
-      .map((item) => ({
-        id: item.product.id,
-        name: item.product.name,
-        price: Math.floor(item.product.price * 100), // 센트 단위
-        quantity: item.quantity,
-        imageUrl: item.product.thumbnailImageUrl,
-      }));
+  if (wishItems.length === 0) return <div>위시리스트가 비어 있습니다.</div>;
 
-    if (selectedItems.length === 0) {
-      return alert("선택된 상품이 없습니다.");
-    }
-    setLoadingCheckout(true);
-    // Checkout 페이지로 이동, items state 전달
-    navigate("/checkout", { state: { items: selectedItems } });
+  // 선택된 전체 위시리스트 아이템 장바구니 이동 (위시리스트 유지)
+  const moveAllToCart = () => {
+    const selectedItems = wishItems.filter((i) => i.selected);
+    selectedItems.forEach((item) => {
+      dispatch(
+        addCartItem({
+          product: item.product,
+          quantity: item.quantity,
+          selected: false,
+        })
+      );
+      // 위시리스트에서는 삭제하지 않음
+    });
   };
-
-  if (cartItems.length === 0) return <div>장바구니가 비어 있습니다.</div>;
 
   return (
     <div className="flex flex-col gap-6 p-4">
-      <div>
+      {/* 상단 선택/삭제 */}
+      <div className="flex items-center gap-2">
         <input
           type="checkbox"
           checked={allSelected}
@@ -69,9 +64,13 @@ const CartDetail = () => {
         <button onClick={() => dispatch(deleteSelected())}>
           Delete Selected
         </button>
+        <Button onClick={moveAllToCart} className="ml-4">
+          선택 상품 전체 장바구니 이동
+        </Button>
       </div>
 
-      {cartItems.map((item) => (
+      {/* 위시리스트 아이템 */}
+      {wishItems.map((item) => (
         <div
           key={item.product.id}
           className="flex items-center justify-between border-b pb-4"
@@ -93,6 +92,7 @@ const CartDetail = () => {
             </div>
           </div>
 
+          {/* 수량 및 삭제 */}
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -119,27 +119,34 @@ const CartDetail = () => {
               <Trash2 />
             </Button>
           </div>
+
+          {/* 개별 장바구니 이동 버튼 */}
+          <Button
+            className="add-to-cart-button"
+            onClick={() =>
+              dispatch(
+                addCartItem({
+                  product: item.product,
+                  quantity: item.quantity,
+                  selected: false,
+                })
+              )
+            }
+          >
+            장바구니에 담기
+          </Button>
         </div>
       ))}
 
+      {/* 선택 총액 */}
       <div className="mt-6 flex justify-end items-center gap-4">
         <span className="font-semibold text-lg">Total:</span>
         <span className="font-bold text-xl">
           {formatPrice(totalSelectedPrice)}
         </span>
       </div>
-
-      <div className="mt-4 flex justify-end">
-        <Button
-          onClick={handleCheckout}
-          disabled={loadingCheckout}
-          className="bg-black text-white"
-        >
-          {loadingCheckout ? "결제 중..." : "결제하기"}
-        </Button>
-      </div>
     </div>
   );
 };
 
-export default CartDetail;
+export default WishDetail;
