@@ -1,6 +1,6 @@
 import React from "react";
 import "./header.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   UserIcon,
   CartIcon,
@@ -11,12 +11,16 @@ import {
 import { useAppSelector } from "@/hooks/hooks";
 import { selectCartCount } from "@/routes/store/cartStore";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import DropdownButton from "../Button/DropdownButton";
 const Header = () => {
   const wishItems = useAppSelector((state) => state.wish.items);
 
   const cartCount = useAppSelector(selectCartCount);
 
   const hasItems = wishItems.length > 0; // 1개라도 있으면 Active
+  const { user, loading, logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <header className="header_wrap">
@@ -42,9 +46,36 @@ const Header = () => {
                 )}
               </div>
             </Link>
-            <Link to="/login" className="icon">
+            {user ? (
+              <DropdownButton
+                buttonContent={<UserIcon />}
+                options={[
+                  {
+                    subTitle: "로그인된계정",
+                    items: [
+                      { label: "로그아웃", onClick: logout },
+                      { label: "회원가입", onClick: () => navigate("/signup") },
+                    ],
+                  },
+                ]}
+              />
+            ) : (
+              <DropdownButton
+                buttonContent={<UserIcon />}
+                options={[
+                  {
+                    subTitle: "계정2222",
+                    items: [
+                      { label: "로그인", onClick: () => navigate("/login") },
+                      { label: "회원가입", onClick: () => navigate("/signup") },
+                    ],
+                  },
+                ]}
+              />
+            )}
+            {/* <Link to="/login" className="icon">
               <UserIcon />
-            </Link>
+            </Link> */}
           </div>
         </div>
         <nav className="nav bottom">

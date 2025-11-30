@@ -42,7 +42,7 @@ import WishList from "@/features/wish/pages/WishList";
 // import AuthLayout from "@/layouts/AuthLayout";
 
 export default function AppRoutes() {
-  const { user, loading } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) return <div>Loading...</div>;
   return (
@@ -50,11 +50,6 @@ export default function AppRoutes() {
       <Routes>
         {/* 사용자 레이아웃 */}
         <Route element={<MainLayout />}>
-          {user ? (
-            <Route path="/" element={<Home />} />
-          ) : (
-            <Route path="/login" element={<Login />} />
-          )}
           <Route path="/" element={<Home />} />
           <Route path="product/:id" element={<ProductDetailList />} />
           <Route path="/cart" element={<CartList />} />
@@ -62,8 +57,7 @@ export default function AppRoutes() {
           <Route path="/checkout" element={<CheckoutList />} />
           <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} />
-
-          {/* <Route path="/login" element={<Login />} /> */}
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
         </Route>
 

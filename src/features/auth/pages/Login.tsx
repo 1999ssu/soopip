@@ -1,19 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 
 export default function Login() {
-  const { login, loading, error } = useAuth();
+  const { user, login, loading, error } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (user) {
+      navigate("/"); // 로그인 상태면 홈으로
+    }
+  }, [user, navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(email, password);
-    navigate("/");
+    const success = await login(email, password);
+    if (success) {
+      navigate("/"); // 로그인 성공하면 홈으로 이동
+    }
   };
-
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
       <form
@@ -48,8 +55,7 @@ export default function Login() {
         <div className="text-sm text-center mt-3">
           <Link to="/signup" className="text-blue-500 hover:underline">
             회원가입
-          </Link>{" "}
-          ·{" "}
+          </Link>
           <Link to="/reset" className="text-blue-500 hover:underline">
             비밀번호 재설정
           </Link>
