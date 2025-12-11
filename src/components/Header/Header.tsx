@@ -19,20 +19,20 @@ const Header = () => {
   const cartCount = useAppSelector(selectCartCount);
 
   const hasItems = wishItems.length > 0; // 1개라도 있으면 Active
-  const { user, loading, logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   return (
     <header className="header_wrap">
       <div className="header">
-        <div className="top flex flex-row">
+        <div className="top flex flex-row items-center">
           <Link to="/products" className="icon">
             <SearchIcon />
           </Link>
           <div className="logo">
             <Link to="/">Soopip로고자리</Link>
           </div>
-          <div className="flex flex-row gap-6">
+          <div className="flex flex-row gap-6 items-center">
             <Link to="/wish" className="icon">
               {hasItems ? <WishActiveIcon /> : <WishIcon />}
             </Link>
@@ -48,7 +48,7 @@ const Header = () => {
             </Link>
             {user ? (
               <DropdownButton
-                buttonContent={<UserIcon />}
+                buttonContent={<UserIcon className="icon" />}
                 options={[
                   {
                     subTitle: "로그인된계정",
@@ -61,7 +61,7 @@ const Header = () => {
               />
             ) : (
               <DropdownButton
-                buttonContent={<UserIcon />}
+                buttonContent={<UserIcon className="icon" />}
                 options={[
                   {
                     subTitle: "계정2222",
@@ -73,9 +73,6 @@ const Header = () => {
                 ]}
               />
             )}
-            {/* <Link to="/login" className="icon">
-              <UserIcon />
-            </Link> */}
           </div>
         </div>
         <nav className="nav bottom">

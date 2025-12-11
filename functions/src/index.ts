@@ -64,6 +64,7 @@ export const createCheckoutSession = functions.https.onRequest((req, res) => {
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         mode: "payment",
+        customer_email: userInfo.email,
         line_items,
         metadata: {
           customer_name: userInfo.name,

@@ -32,10 +32,13 @@ const DropdownButton = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{buttonContent}</Button>
+        <Button className="p-0">{buttonContent}</Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className={width ?? "w-56"} align="start">
+      <DropdownMenuContent
+        className={`bg-white ${width ?? "w-56"}`}
+        align="start"
+      >
         {options.map((group) => (
           <DropdownMenuGroup key={group.subTitle}>
             <DropdownMenuLabel>{group.subTitle}</DropdownMenuLabel>

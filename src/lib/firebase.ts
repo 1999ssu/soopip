@@ -16,7 +16,7 @@ const firebaseConfig = {
 };
 
 //Firebase App Reset
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 //인증(Auth)와 DB(Firestore) export
 export const auth = getAuth(app);

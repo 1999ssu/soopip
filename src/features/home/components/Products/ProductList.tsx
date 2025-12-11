@@ -7,15 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { goToPageByNameWithId } from "@/utils/RouterUtil";
 import WishButton from "@/components/Button/WishButton";
 import { Product } from "@/features/product/types/product.types";
-// interface Product {
-//   id: string;
-//   name: string;
-//   price: number;
-//   thumbnailImageUrl: string;
-//   stock: number;
-//   isSoldOut: boolean;
-//   description?: string;
-// }
 
 const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);

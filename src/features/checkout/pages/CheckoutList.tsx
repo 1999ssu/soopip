@@ -12,4 +12,5 @@ const CheckoutList = () => {
 
   return <CheckoutDetail items={state.items} />;
 };
+
 export default CheckoutList;
