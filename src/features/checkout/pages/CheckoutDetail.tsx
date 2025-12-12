@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
 import {
   Sheet,
   SheetClose,
@@ -11,13 +10,7 @@ import {
 import { PlusIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import AddressForm from "../components/AddressForm";
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import {
   Accordion,
   AccordionContent,
@@ -39,7 +32,6 @@ interface CartItem {
   quantity: number;
   imageUrl: string;
 }
-
 interface CheckoutFormProps {
   items: CartItem[];
 }
@@ -55,6 +47,13 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
 
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [addressFormOpen, setAddressFormOpen] = useState(false);
+
+  const subTotal =
+    items.reduce((sum, item) => sum + item.price * item.quantity, 0) / 100;
+  const total = subTotal + 10 + subTotal * 0.13;
+
+  const totalQty = items.reduce((sum, item) => sum + item.quantity, 0);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
@@ -66,10 +65,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
 
     setAddressData(datas);
     setAddressFormOpen(false);
-    console.log("datas::", datas);
-    console.log("addressData", addressData);
   };
-  console.log("addressData", addressData);
   const handleCheckout = async () => {
     if (!userInfo.name || !userInfo.email || !userInfo.address) {
       return alert("이름, 이메일, 주소는 필수입니다.");
@@ -148,8 +144,8 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                   </SheetTrigger>
 
                   <SheetContent className="bg-white overflow-y-auto">
+                    <SheetTitle>Add new Address</SheetTitle>
                     <AddressForm ref={formRef} />
-                    {/* <SheetTitle>Add new Address</SheetTitle> */}
                     <SheetFooter>
                       <Button type="button" onClick={handleAddressClick}>
                         Save changes
@@ -235,12 +231,12 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
               <div className=" flex flex-row justify-between items-center">
                 <p>Subtotal</p>
                 <p>
-                  $<span>1,744</span>
+                  $<span>{subTotal.toFixed(2)}</span>
                 </p>
               </div>
               <div className="flex flex-row justify-between items-center pt-2">
                 <p>Shipping</p>
-                <p>$10</p>
+                {subTotal > 100 ? <p>FREE</p> : <p>$10</p>}
               </div>
               <div className="flex flex-row justify-between items-center pt-2">
                 <p>Taxes</p>
@@ -249,10 +245,10 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
             </CardContent>
             <CardFooter className="w-full flex flex-row justify-between items-center pt-2">
               <p>
-                Total <span>12</span>
+                Total (<span>{totalQty}</span>)
               </p>
               <p>
-                CAD $<span></span>
+                CAD $<span>{total.toFixed(2)}</span>
               </p>
             </CardFooter>
           </Card>
@@ -263,19 +259,6 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
           >
             PLACE ORDER
           </button>
-          {/* <div>
-            <h2>Order Summary</h2>
-            <dl>
-              <dt>Subtotal</dt>
-              <dd>$ <span>1,744</span></dd>
-              <dt>Shipping</dt>
-              <dd>$10</dd>
-              <dt>Taxes</dt>
-              <dd> </dd>
-              <dt></dt>
-              <dd></dd>
-            </dl>
-          </div> */}
         </div>
       </div>
     </div>
