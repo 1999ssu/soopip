@@ -11,10 +11,9 @@ export default function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await signUp(email, password, name);
+    await signUp(name, email, password);
     navigate("/");
   };
-
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
       <form

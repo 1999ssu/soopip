@@ -62,7 +62,7 @@ export const useAuth = () => {
   const signUp = async (name: string, email: string, password: string) => {
     setLoading(true);
     try {
-      const newUser = await registerUser(email, password, name);
+      const newUser = await registerUser(name, email, password);
       const data = await fetchUserData(newUser.uid, newUser.email || "");
       setUserData(data);
       setError(null);

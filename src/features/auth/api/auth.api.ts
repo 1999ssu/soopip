@@ -10,13 +10,13 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import type { UserData } from "../types/auth.types";
 
 export const registerUser = async (
+  name: string,
   email: string,
-  password: string,
-  name?: string
+  password: string
 ) => {
   const userCredential: UserCredential = await createUserWithEmailAndPassword(
     auth,
-    email,
+    email.trim(),
     password
   );
   const user = userCredential.user;
