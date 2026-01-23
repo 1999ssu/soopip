@@ -1,5 +1,5 @@
 export interface Product {
-  id?: string;
+  id: string;
   name: string;
   price: number; // 센트로 저장
   stock: number;

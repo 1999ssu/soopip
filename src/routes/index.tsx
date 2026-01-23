@@ -27,6 +27,11 @@ import Success from "@/features/checkout/pages/Success";
 import Cancel from "@/features/checkout/pages/Cancel";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import WishList from "@/features/wish/pages/WishList";
+import { useEffect } from "react";
+import { auth } from "@/lib/firebase";
+import { useAppDispatch } from "@/hooks/hooks";
+import { clearCart, loadUserCart } from "./store/cartStore";
+import { loadUserWish } from "./store/wishStore";
 // import ResetPassword from "@/features/auth/pages/ResetPassword";
 
 // Product
@@ -42,7 +47,26 @@ import WishList from "@/features/wish/pages/WishList";
 // import AuthLayout from "@/layouts/AuthLayout";
 
 export default function AppRoutes() {
+  const dispatch = useAppDispatch();
   const { loading } = useAuth();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      console.log(
+        "Cart 페이지 Auth 상태 변화:",
+        user ? "로그인 (" + user.uid + ")" : "로그아웃"
+      );
+
+      if (user) {
+        dispatch(loadUserCart());
+        dispatch(loadUserWish());
+      } else {
+        dispatch(clearCart()); // 로그아웃 시 장바구니 비우기 (선택)
+      }
+    });
+
+    return () => unsubscribe(); // cleanup 필수!
+  }, [dispatch]);
 
   if (loading) return <div>Loading...</div>;
   return (

@@ -43,3 +43,11 @@
   width: 100%;
   height: 100%;
 }
+.product .wish {
+  left: 0px;
+  right: inherit;
+}
+.product .icon {
+  width: 35px !important;
+  height: 35px !important;
+}

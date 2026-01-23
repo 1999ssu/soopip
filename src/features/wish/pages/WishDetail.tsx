@@ -1,23 +1,38 @@
 // src/features/wish/pages/WishDetail.tsx
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/hooks/hooks";
-import { addItem as addCartItem } from "@/routes/store/cartStore";
+import { saveCartItem } from "@/routes/store/cartStore";
 import {
-  increment,
-  decrement,
-  removeItem,
   toggleSelectItem,
   selectAll,
   deselectAll,
-  deleteSelected,
+  loadUserWish,
+  removeWishItem,
+  deleteSelectedWishItems,
 } from "@/routes/store/wishStore";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { formatPrice } from "@/utils/formatPrice";
+import { auth } from "@/lib/firebase";
 
 const WishDetail = () => {
   const dispatch = useAppDispatch();
-  const wishItems = useAppSelector((state) => state.wish.items);
+
+  //1.19 주석
+  // const wishItems = useAppSelector((state) => state.wish.items);
+
+  //1.19 추가
+  const { items: wishItems, loading: wishLoading } = useAppSelector(
+    (state) => state.wish
+  );
+
+  // 로그인 상태일 때 위시리스트 자동 불러오기
+  useEffect(() => {
+    if (auth.currentUser) {
+      dispatch(loadUserWish());
+    }
+  }, [dispatch]);
+  ////////////////////////////////////////////////
 
   useEffect(() => {
     return () => {
@@ -39,7 +54,7 @@ const WishDetail = () => {
     const selectedItems = wishItems.filter((i) => i.selected);
     selectedItems.forEach((item) => {
       dispatch(
-        addCartItem({
+        saveCartItem({
           product: item.product,
           quantity: item.quantity,
           selected: false,
@@ -61,7 +76,7 @@ const WishDetail = () => {
           }
         />
         Select All
-        <button onClick={() => dispatch(deleteSelected())}>
+        <button onClick={() => dispatch(deleteSelectedWishItems())}>
           Delete Selected
         </button>
         <Button onClick={moveAllToCart} className="ml-4">
@@ -92,29 +107,12 @@ const WishDetail = () => {
             </div>
           </div>
 
-          {/* 수량 및 삭제 */}
+          {/* 삭제 */}
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="icon"
-              onClick={() => dispatch(decrement(item.product.id))}
-              disabled={item.quantity === 1}
-            >
-              <Minus />
-            </Button>
-            <span>{item.quantity}</span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => dispatch(increment(item.product.id))}
-            >
-              <Plus />
-            </Button>
-
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => dispatch(removeItem(item.product.id))}
+              onClick={() => dispatch(removeWishItem(item.product.id))}
             >
               <Trash2 />
             </Button>
@@ -123,15 +121,19 @@ const WishDetail = () => {
           {/* 개별 장바구니 이동 버튼 */}
           <Button
             className="add-to-cart-button"
-            onClick={() =>
+            onClick={() => {
+              console.log(
+                "위시 → 장바구니 이동 시도 - 상품 ID:",
+                item.product.id
+              );
               dispatch(
-                addCartItem({
+                saveCartItem({
                   product: item.product,
-                  quantity: item.quantity,
+                  quantity: 1,
                   selected: false,
                 })
-              )
-            }
+              );
+            }}
           >
             장바구니에 담기
           </Button>

@@ -53,7 +53,13 @@ const Header = () => {
                   {
                     subTitle: "로그인된계정",
                     items: [
-                      { label: "로그아웃", onClick: logout },
+                      {
+                        label: "로그아웃",
+                        onClick: async () => {
+                          await logout();
+                          navigate("/");
+                        },
+                      },
                       { label: "회원가입", onClick: () => navigate("/signup") },
                     ],
                   },

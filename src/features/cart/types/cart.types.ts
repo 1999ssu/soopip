@@ -6,6 +6,7 @@ export interface CartProduct extends OriginalProduct {
 }
 
 export interface CartItem {
+  id?: string;
   product: CartProduct; // CartProduct 사용
   quantity: number;
   selected: boolean;

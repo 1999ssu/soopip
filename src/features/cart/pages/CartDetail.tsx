@@ -9,17 +9,28 @@ import {
   selectAll,
   deleteSelected,
   toggleSelectItem,
+  loadUserCart,
+  removeCartItem,
+  deleteSelectedCartItems,
 } from "@/routes/store/cartStore";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth } from "@/lib/firebase";
 
 const CartDetail = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const cartItems = useAppSelector((state) => state.cart.items);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
+
+  // // 로그인 상태일 때 카트 자동 불러오기
+  // useEffect(() => {
+  //   if (auth.currentUser) {
+  //     dispatch(loadUserCart());
+  //   }
+  // }, [dispatch]);
 
   useEffect(() => {
     return () => {
@@ -66,7 +77,7 @@ const CartDetail = () => {
           }
         />
         Select All
-        <button onClick={() => dispatch(deleteSelected())}>
+        <button onClick={() => dispatch(deleteSelectedCartItems())}>
           Delete Selected
         </button>
       </div>
@@ -114,7 +125,7 @@ const CartDetail = () => {
             <Button
               variant="outline"
               size="icon"
-              onClick={() => dispatch(removeItem(item.product.id))}
+              onClick={() => dispatch(removeCartItem(item.product.id))}
             >
               <Trash2 />
             </Button>
