@@ -31,7 +31,10 @@ import { useEffect } from "react";
 import { auth } from "@/lib/firebase";
 import { useAppDispatch } from "@/hooks/hooks";
 import { clearCart, loadUserCart } from "./store/cartStore";
-import { loadUserWish } from "./store/wishStore";
+import { clearWish, loadUserWish } from "./store/wishStore";
+import MyAddressesList from "@/features/myPage/myAddresses/pages/MyAddressesList";
+import MyOrdersList from "@/features/myPage/myOrders/pages/MyOrdersList";
+import MyProfileList from "@/features/myPage/myProfile/pages/MyProfileList";
 // import ResetPassword from "@/features/auth/pages/ResetPassword";
 
 // Product
@@ -52,16 +55,12 @@ export default function AppRoutes() {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      console.log(
-        "Cart 페이지 Auth 상태 변화:",
-        user ? "로그인 (" + user.uid + ")" : "로그아웃"
-      );
-
       if (user) {
         dispatch(loadUserCart());
         dispatch(loadUserWish());
       } else {
-        dispatch(clearCart()); // 로그아웃 시 장바구니 비우기 (선택)
+        dispatch(clearWish()); //로그아웃 시 wish 비우기
+        dispatch(clearCart()); // 로그아웃 시 cart 비우기
       }
     });
 
@@ -81,6 +80,9 @@ export default function AppRoutes() {
           <Route path="/checkout" element={<CheckoutList />} />
           <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} />
+          <Route path="/myProfile" element={<MyProfileList />} />
+          <Route path="/myOrders" element={<MyOrdersList />} />
+          <Route path="/myAddresses" element={<MyAddressesList />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
         </Route>

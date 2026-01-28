@@ -22,6 +22,7 @@ export const useAuth = () => {
 
     if (docSnap.exists()) {
       const data = docSnap.data();
+      console.log("data::", data);
       return {
         name: data.name as string,
         email: data.email as string,
@@ -31,6 +32,7 @@ export const useAuth = () => {
         name: "새 사용자",
         email: email || "",
       };
+      console.log("newUserData::", newUserData);
       await setDoc(doc(db, "users", uid), newUserData);
       return newUserData;
     }
