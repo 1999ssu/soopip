@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./header.css";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -19,7 +19,8 @@ const Header = () => {
   const cartCount = useAppSelector(selectCartCount);
 
   const hasItems = wishItems.length > 0; // 1개라도 있으면 Active
-  const { user, logout } = useAuth();
+  const { user, logout, userData } = useAuth();
+
   const navigate = useNavigate();
 
   return (
@@ -51,33 +52,53 @@ const Header = () => {
                 buttonContent={<UserIcon className="icon" />}
                 options={[
                   {
-                    subTitle: "로그인된계정",
+                    subTitle: userData?.name,
                     items: [
                       {
-                        label: "로그아웃",
+                        label: "My Profile",
+                        onClick: () => {
+                          navigate("/myProfile");
+                        },
+                      },
+                      {
+                        label: "My Orders",
+                        onClick: () => {
+                          navigate("/myOrders");
+                        },
+                      },
+                      {
+                        label: "My Addresses",
+                        onClick: () => {
+                          navigate("/myAddresses");
+                        },
+                      },
+                      {
+                        label: "Log Out",
                         onClick: async () => {
                           await logout();
                           navigate("/");
                         },
                       },
-                      { label: "회원가입", onClick: () => navigate("/signup") },
                     ],
                   },
                 ]}
               />
             ) : (
-              <DropdownButton
-                buttonContent={<UserIcon className="icon" />}
-                options={[
-                  {
-                    subTitle: "계정2222",
-                    items: [
-                      { label: "로그인", onClick: () => navigate("/login") },
-                      { label: "회원가입", onClick: () => navigate("/signup") },
-                    ],
-                  },
-                ]}
-              />
+              <Link to="/login">
+                <UserIcon className="icon" />
+              </Link>
+              // <DropdownButton
+              //   buttonContent={<UserIcon className="icon" />}
+              //   options={[
+              //     {
+              //       subTitle: "계정2222",
+              //       items: [
+              //         { label: "로그인", onClick: () => navigate("/login") },
+              //         { label: "회원가입", onClick: () => navigate("/signup") },
+              //       ],
+              //     },
+              //   ]}
+              // />
             )}
           </div>
         </div>
