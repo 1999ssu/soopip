@@ -48,19 +48,47 @@ export const createCheckoutSession = functions.https.onRequest((req, res) => {
       if (!userInfo || !userInfo.email) {
         return res.status(400).send("User info missing");
       }
+      const subTotalCents = items.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
+      const subTotal = subTotalCents / 100;
 
-      const line_items = items.map((item) => ({
-        price_data: {
-          currency: "cad",
-          product_data: {
-            name: item.name || "Unknown Product",
-            images: item.imageUrl ? [item.imageUrl] : [],
+      // 배송비 10달러 고정
+      const shipping = subTotal > 100 ? 0 : 10;
+
+      // 세금 13%
+      const tax = parseFloat((subTotal * 0.13).toFixed(2));
+
+      const line_items = [
+        ...items.map((item) => ({
+          price_data: {
+            currency: "cad",
+            product_data: {
+              name: item.name || "Unknown Product",
+              images: item.imageUrl ? [item.imageUrl] : [],
+            },
+            unit_amount: item.price,
           },
-          unit_amount: Math.floor(item.price), // Stripe는 정수만 허용
+          quantity: item.quantity,
+        })),
+        {
+          price_data: {
+            currency: "cad",
+            product_data: { name: "Shipping" },
+            unit_amount: Math.round(shipping * 100),
+          },
+          quantity: 1,
         },
-
-        quantity: item.quantity,
-      }));
+        {
+          price_data: {
+            currency: "cad",
+            product_data: { name: "Tax" },
+            unit_amount: Math.round(tax * 100),
+          },
+          quantity: 1,
+        },
+      ];
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         mode: "payment",
@@ -70,7 +98,8 @@ export const createCheckoutSession = functions.https.onRequest((req, res) => {
           customer_name: userInfo.name,
           customer_phone: userInfo.phone || "",
           customer_address: userInfo.address || "",
-          order_items: JSON.stringify(items),
+          // order_items: JSON.stringify(items),
+          item_ids: items.map((i) => i.id).join(","),
         },
         success_url: "http://localhost:5173/success",
         cancel_url: "http://localhost:5173/cancel",

@@ -109,7 +109,11 @@ const EditAddressList = ({
                   <Button
                     size="sm"
                     variant="destructive"
-                    onClick={() => onDelete(addr.id)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onDelete(addr.id);
+                    }}
                   >
                     Delete
                   </Button>

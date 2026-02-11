@@ -24,23 +24,25 @@ export const stripeWebhook = functions.https.onRequest(async (req, res) => {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as any;
 
-    const orderData = {
-      customer_name: session.metadata.customer_name,
-      customer_email: session.customer_email,
-      customer_phone: session.metadata.customer_phone,
-      customer_address: session.metadata.customer_address,
-      order_items: JSON.parse(session.metadata.order_items),
-      total_amount: session.amount_total,
-      currency: session.currency,
-      created_at: admin.firestore.FieldValue.serverTimestamp(),
-    };
+    const snapshot = await admin
+      .firestore()
+      .collection("orders")
+      .where("stripeSessionId", "==", session.id)
+      .get();
 
-    try {
-      await admin.firestore().collection("orders").add(orderData);
-      console.log("Order saved to Firestore:", orderData);
-    } catch (err) {
-      console.error("Failed to save order:", err);
-    }
+    snapshot.forEach((doc) => {
+      doc.ref.update({
+        status: "PAID",
+        paymentIntentId: session.payment_intent,
+        paidAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    });
+    // try {
+    //   await admin.firestore().collection("orders").add(orderData);
+    //   console.log("Order saved to Firestore:", orderData);
+    // } catch (err) {
+    //   console.error("Failed to save order:", err);
+    // }
   }
 
   res.json({ received: true }); // 여기서도 return 없이 호출

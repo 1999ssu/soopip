@@ -30,40 +30,6 @@ interface AddressState {
   error: string | null;
 }
 
-//1.19 주석
-///////////////
-// const loadInitialState = (): AddressState => {
-//   const saved = localStorage.getItem("address");
-//   if (saved) {
-//     try {
-//       return JSON.parse(saved);
-//     } catch {
-//       return {
-//         addresses: [],
-//         defaultAddressId: null,
-//         selectedAddressId: null,
-//         confirmedAddressId: null,
-
-//         //1/19 추가
-//         loading: false,
-//         error: null,
-//       };
-//     }
-//   }
-//   return {
-//     addresses: [],
-//     defaultAddressId: null,
-//     selectedAddressId: null,
-//     confirmedAddressId: null,
-
-//     //1/19 추가
-//     loading: false,
-//     error: null,
-//   };
-// };
-
-// const initialState: AddressState = loadInitialState();
-
 const initialState: AddressState = {
   addresses: [],
   defaultAddressId: null,
@@ -77,15 +43,12 @@ const addressSlice = createSlice({
   name: "address",
   initialState,
   reducers: {
-    //1/19 추가
-    //////////////////////////////////////////
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
-    //////////////////////////////////////////
     setAddresses: (state, action: PayloadAction<Address[]>) => {
       state.addresses = action.payload;
     },
@@ -97,8 +60,6 @@ const addressSlice = createSlice({
         state.selectedAddressId = action.payload.id;
         state.confirmedAddressId = action.payload.id;
       }
-      //1.19 주석
-      // localStorage.setItem("address", JSON.stringify(state));
     },
     updateAddress: (state, action: PayloadAction<Address>) => {
       const index = state.addresses.findIndex(
@@ -107,8 +68,6 @@ const addressSlice = createSlice({
       if (index !== -1) {
         state.addresses[index] = action.payload;
       }
-      //1.19 주석
-      // localStorage.setItem("address", JSON.stringify(state));
     },
     deleteAddress: (state, action: PayloadAction<string>) => {
       state.addresses = state.addresses.filter((a) => a.id !== action.payload);
@@ -125,18 +84,12 @@ const addressSlice = createSlice({
         state.confirmedAddressId =
           state.defaultAddressId || state.addresses[0]?.id || null;
       }
-      //1.19 주석
-      // localStorage.setItem("address", JSON.stringify(state));
     },
     setDefaultAddress: (state, action: PayloadAction<string>) => {
       state.defaultAddressId = action.payload;
-      //1.19 주석
-      // localStorage.setItem("address", JSON.stringify(state));
     },
     setSelectedAddress: (state, action: PayloadAction<string>) => {
       state.selectedAddressId = action.payload;
-      //1.19 주석
-      // localStorage.setItem("address", JSON.stringify(state));
     },
     confirmAddress: (state) => {
       state.confirmedAddressId =
@@ -144,16 +97,12 @@ const addressSlice = createSlice({
         state.defaultAddressId ||
         state.addresses[0]?.id ||
         null;
-      //1.19 주석
-      // localStorage.setItem("address", JSON.stringify(state));
     },
     clearAddresses: (state) => {
       state.addresses = [];
       state.defaultAddressId = null;
       state.selectedAddressId = null;
       state.confirmedAddressId = null;
-      //1.19 주석
-      // localStorage.setItem("address", JSON.stringify(state));
     },
   },
 });
@@ -219,14 +168,10 @@ export const saveAddress =
       const newAddress = { ...address, id: docRef.id, isDefault };
       dispatch(addAddress(newAddress));
 
-      //1.19 추가
-      dispatch(addAddress(newAddress));
-      ////////////////////////////////////////////
       if (isDefault) {
         dispatch(setDefaultAddress(docRef.id));
       }
     } catch (err: any) {
-      console.log("err11:", setError(err.message));
       dispatch(setError(err.message));
     }
   };

@@ -6,6 +6,7 @@ import {
   loadUserAddresses,
   updateUserAddress,
   saveAddress,
+  deleteUserAddress,
 } from "@/routes/store/addressStore";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,6 +37,8 @@ import {
 
 import EditAddressList from "../components/EditAddressList";
 import { auth } from "@/lib/firebase";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { calculateOrderSummary, roundToCent } from "@/utils/formatPrice";
 
 interface CartItem {
   id: string;
@@ -61,26 +64,50 @@ interface Address {
 }
 
 const CheckoutDetail = ({ items }: CheckoutFormProps) => {
+  const { user, userData } = useAuth();
   const dispatch = useAppDispatch();
 
-  const [userInfo, setUserInfo] = useState({
+  const [userInfo, setUserInfo] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    fullAddress: string; // 전체 주소 문자열
+    orderSummary?: {
+      items: Array<{
+        id: string;
+        name: string;
+        price: number;
+        quantity: number;
+        // subtotal: number;
+      }>;
+      // subtotal: number;
+      // shipping: number;
+      // tax: number;
+      total: number;
+    };
+  }>({
     name: "",
     email: "",
     phone: "",
-    address: "",
+    fullAddress: "",
+    orderSummary: undefined,
   });
+
   const [loading, setLoading] = useState(false);
 
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [addressFormOpen, setAddressFormOpen] = useState(false);
 
-  const subTotal =
-    items.reduce((sum, item) => sum + item.price * item.quantity, 0) / 100;
-  const total = subTotal + 10 + subTotal * 0.13;
+  // const subTotal =
+  //   items.reduce((sum, item) => sum + item.price * item.quantity, 0) / 100;
+  // const total = subTotal + 10 + subTotal * 0.13;
 
-  const totalQty = items.reduce((sum, item) => sum + item.quantity, 0);
+  // const totalQty = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null); // 수정 중인 주소 ID
+
+  const { subTotal, shipping, tax, total, totalQty } =
+    calculateOrderSummary(items);
 
   const [mode, setMode] = useState<"add" | "edit">("add");
   const goToAdd = () => {
@@ -113,6 +140,58 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
     }
   }, [dispatch]);
 
+  // displayAddress가 변경될 때마다 userInfo 업데이트
+  useEffect(() => {
+    if (displayAddress) {
+      const fullAddr = [
+        displayAddress.detail,
+        displayAddress.address?.address,
+        displayAddress.address?.city,
+        `${displayAddress.address?.state}, ${displayAddress.address?.postalCode}`,
+      ]
+        .filter(Boolean)
+        .join(", ");
+
+      setUserInfo((prev) => ({
+        ...prev,
+        name: `${displayAddress.info.firstName} ${displayAddress.info.lastName}`,
+        phone: displayAddress.info.phoneNum,
+        fullAddress: fullAddr, // 추가: 전체 주소 문자열
+      }));
+    }
+  }, [displayAddress]);
+
+  // 장바구니 아이템 요약 계산 (items가 변경될 때마다)
+  useEffect(() => {
+    if (items.length === 0) return;
+
+    const subtotal =
+      items.reduce((sum, item) => sum + item.price * item.quantity, 0) / 100;
+    const shipping = roundToCent(subtotal > 100 ? 0 : 10);
+    const tax = roundToCent(subtotal * 0.13);
+    const total = roundToCent(subtotal + shipping + tax);
+
+    const orderItems = items.map((item) => ({
+      id: item.id,
+      name: item.name,
+      price: item.price / 100, // 달러 단위로 변환 (필요시)
+      quantity: item.quantity,
+      // imageUrl: item.imageUrl,
+      total: (item.price * item.quantity) / 100,
+    }));
+
+    setUserInfo((prev) => ({
+      ...prev,
+      orderSummary: {
+        items: orderItems,
+        // subtotal,
+        // shipping,
+        // tax,
+        total,
+      },
+    }));
+  }, [items]);
+
   const handleAddressClick = async () => {
     const result = formRef.current?.getValues();
     if (!result) return;
@@ -144,7 +223,10 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
     try {
       if (editingAddressId) {
         await dispatch(
-          updateUserAddress({ ...addressData, id: editingAddressId }, isDefault)
+          updateUserAddress(
+            { ...addressData, id: editingAddressId },
+            isDefault,
+          ),
         );
       } else {
         await dispatch(saveAddress(addressData, isDefault));
@@ -163,19 +245,31 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
   ////////////////////////////////////////////////
 
   const handleCheckout = async () => {
-    if (!userInfo.name || !userInfo.email || !userInfo.address) {
-      return alert("이름, 이메일, 주소는 필수입니다.");
+    if (!userInfo.name || !userData.email || !userInfo.fullAddress) {
+      // return alert("이름, 이메일, 주소는 필수입니다.");
+      return console.log("이름,이메일,주소는 필수입니다.");
     }
 
     setLoading(true);
     try {
+      const payload = {
+        items, // 원본 items 그대로
+        userInfo: {
+          name: userData.name,
+          email: userData.email,
+          phone: userInfo.phone,
+          fullAddress: userInfo.fullAddress,
+          orderSummary: userInfo.orderSummary, // 요약 정보 포함
+        },
+      };
+      console.log("paylo", payload.userInfo.orderSummary);
       const res = await fetch(
         "https://us-central1-soopip.cloudfunctions.net/createCheckoutSession",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ items, userInfo }),
-        }
+          body: JSON.stringify(payload),
+        },
       );
 
       if (!res.ok) {
@@ -184,6 +278,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
       }
 
       const data = await res.json();
+
       if (!data.url) throw new Error("결제 URL이 존재하지 않습니다.");
 
       // Stripe 결제 페이지로 이동
@@ -266,7 +361,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                           onClick={() => {
                             const defaultAddr =
                               addresses.find(
-                                (a) => a.id === defaultAddressId
+                                (a) => a.id === defaultAddressId,
                               ) || addresses[0];
                             setEditingAddressId(defaultAddr.id);
                             setMode("edit"); // AddressForm 사용
@@ -289,7 +384,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                         initialData={
                           editingAddressId
                             ? addresses.find(
-                                (a) => a.id === editingAddressId
+                                (a) => a.id === editingAddressId,
                               ) || null
                             : null
                         }
@@ -320,7 +415,10 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                         //   if (id === selectedAddressId)
                         //     setSelectedAddressId(null);
                         // }}
-                        onDelete={(id) => dispatch(deleteAddress(id))}
+                        onDelete={(id) => {
+                          console.log("작동됨");
+                          dispatch(deleteUserAddress(id));
+                        }}
                         onBackClick={goToAdd}
                         // onSave={() => {
                         //   // ⭐ Save 버튼 눌렀을 때
@@ -430,12 +528,11 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                 </p>
               </div>
               <div className="flex flex-row justify-between items-center pt-2">
-                <p>Shipping</p>
-                {subTotal > 100 ? <p>FREE</p> : <p>$10</p>}
+                <p>Shipping</p>${shipping}
               </div>
               <div className="flex flex-row justify-between items-center pt-2">
                 <p>Taxes</p>
-                <p>13%</p>
+                <p>${tax}</p>
               </div>
             </CardContent>
             <CardFooter className="w-full flex flex-row justify-between items-center pt-2">
