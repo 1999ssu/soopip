@@ -1,44 +1,73 @@
 .banner_wrap {
+  height: calc(100dvh - 120px);
   position: relative;
   z-index: 1;
 }
 .banner_wrap::before {
   content: "";
   position: absolute;
-  left: 0;
-  margin: 0 auto;
-  right: -100vw;
-  width: 100vw;
-  height: 100%;
-  transform: translateX(-50%);
-  background: rgb(255, 210, 160);
+  left: 50%;
+  top: 50%;
+  width: calc(100vw - 50px);
+  height: calc(100% - 50px);
+  transform: translate(-50%, -50%);
+  border-radius: 50px;
   z-index: -1;
 }
+.banner_wrap::after {
+  content: "";
+  position: absolute;
+  background: #852623;
+  left: 50%;
+  top: 0px;
+  width: calc(100vw - 15px);
+  height: 100%;
+  transform: translateX(-50%);
+  z-index: -2;
+}
+
 /* 슬라이드 색상들 */
+.banner_bg_0::before {
+  background: url("../assets/images/banner_1.png") no-repeat center / cover;
+}
 .banner_bg_1::before {
-  background-color: #deccb4;
+  background: url("../assets/images/banner_2.png") no-repeat center / cover;
 }
 .banner_bg_2::before {
-  background-color: #949ebd;
-}
-.banner_bg_3::before {
-  background-color: #f1d06c;
+  background: url("../assets/images/banner_3.png") no-repeat center / cover;
 }
 
-.banner_slide .img_wrap {
+/* .banner_slide .img_wrap {
   width: 790px;
   height: 450px;
-}
+} */
 
 .banner {
-  gap: 20px;
-  padding: 30px;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 80px;
   box-sizing: border-box;
+  /* gap: 20px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-between; */
 }
 
+.banner .txt_wrap {
+  color: #f5f6dc;
+  width: 500px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.banner .txt_wrap h2 {
+  font-size: 90px;
+}
+.banner .txt_wrap p {
+  font-size: 24px;
+}
 .banner_slide .img_wrap img {
   width: 100%;
   height: 100%;
@@ -50,4 +79,19 @@
 .product .icon {
   width: 35px !important;
   height: 35px !important;
+}
+
+.content.products {
+  position: relative;
+}
+.content.products::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 0px;
+  width: calc(100vw - 16px);
+  height: 500px;
+  transform: translateX(-50%);
+  background: #f5f6dc;
 }

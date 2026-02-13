@@ -31,7 +31,7 @@ const ProductList = () => {
     return () => unsub();
   }, []);
   return (
-    <div className="content">
+    <div className="content products">
       <h2>상품들</h2>
       <BasicCardLayout>
         {products.map((item) => (

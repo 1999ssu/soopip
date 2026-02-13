@@ -59,7 +59,7 @@ const ProductDetail = () => {
         },
         quantity: quantity, // 선택한 수량
         selected: true,
-      })
+      }),
     );
     console.log("qe", quantity);
     // 카트 페이지로 이동
@@ -86,9 +86,9 @@ const ProductDetail = () => {
           <div className="w-full flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <h3 className="text-3xl font-bold">{product.name}</h3>
-              <div>공유 영역</div>
+              {/* <div>공유 영역</div> */}
             </div>
-            <div>리뷰 영역</div>
+            {/* <div>리뷰 영역</div> */}
             <h3 className="text-2xl font-bold">${product.price}</h3>
             <ProductInfo />
           </div>

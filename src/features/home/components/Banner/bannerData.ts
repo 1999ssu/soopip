@@ -5,19 +5,22 @@ export const slides: BannerSlideData[] = [
   {
     id: 1,
     imageUrl: Banner1,
-    title: "첫 번째 배너",
-    subtitle: "서브 텍스트1",
+    title: "A Cozy Contrast to Toronto’s Cold Winter",
+    subtitle:
+      "Designed for freezing Toronto days, these cute phone keyrings add a soft, cozy touch to your everyday routine — a small detail that makes winter feel a little warmer.",
   },
   {
     id: 2,
     imageUrl: Banner2,
-    title: "두 번째 배너",
-    subtitle: "서브 텍스트2",
+    title: "Small Details That Stay With You.",
+    subtitle:
+      "Some things don't need to be loud to be noticed. These cute phone keyrings are designed to quietly sit by your side, adding a sense of comfort and personality to your everyday routine.",
   },
   {
     id: 3,
     imageUrl: Banner3,
-    title: "세 번째 배너",
-    subtitle: "서브 텍스트3",
+    title: "For the Little Things You Notice",
+    subtitle:
+      "Not everyone looks for bold statements. These phone keyrings are made for those who notice small details and enjoy quiet moments of charm throughout the day.",
   },
 ];

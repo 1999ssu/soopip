@@ -4,6 +4,11 @@
 .layout {
   padding-top: 120px;
 }
+html {
+  background: #f5f6dc;
+  color: #852623;
+  font-family: "Volkhov", serif;
+}
 body,
 html {
   min-height: 100%;

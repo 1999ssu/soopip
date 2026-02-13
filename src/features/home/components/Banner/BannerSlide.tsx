@@ -7,9 +7,9 @@ interface Props {
 const BannerSlide = ({ slide }: Props) => {
   return (
     <div className="banner_slide banner">
-      <div className="img_wrap">
+      {/* <div className="img_wrap">
         <img src={slide.imageUrl} alt={slide.title} />
-      </div>
+      </div> */}
       <div className="txt_wrap">
         <h2>{slide.title}</h2>
         {slide.subtitle && <p>{slide.subtitle}</p>}
