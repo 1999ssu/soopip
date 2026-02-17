@@ -127,7 +127,7 @@ const CartDetail = () => {
               size="icon"
               onClick={() => dispatch(removeCartItem(item.product.id))}
             >
-              <Trash2 />
+              <Trash2 strokeWidth={1.5} />
             </Button>
           </div>
         </div>

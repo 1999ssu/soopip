@@ -13,6 +13,7 @@ import { selectCartCount } from "@/routes/store/cartStore";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import DropdownButton from "../Button/DropdownButton";
+import { Search, ShoppingCart, User } from "lucide-react";
 const Header = () => {
   const wishItems = useAppSelector((state) => state.wish.items);
 
@@ -28,7 +29,7 @@ const Header = () => {
       <div className="header">
         <div className="top flex flex-row items-center">
           <Link to="/products" className="icon">
-            <SearchIcon />
+            <Search strokeWidth={1.5} />
           </Link>
           <div className="logo">
             <Link to="/">Soopip로고자리</Link>
@@ -39,7 +40,7 @@ const Header = () => {
             </Link>
             <Link to="/cart" className="icon">
               <div className="relative">
-                <CartIcon />
+                <ShoppingCart strokeWidth={1.5} />
                 {cartCount > 0 && (
                   <Badge className="bg-black text-white flex items-center justify-center h-5 min-w-5 rounded-full px-1 font-mono tabular-nums absolute right-[-14px] top-[-6px]">
                     {cartCount}
@@ -49,7 +50,7 @@ const Header = () => {
             </Link>
             {user ? (
               <DropdownButton
-                buttonContent={<UserIcon className="icon" />}
+                buttonContent={<User strokeWidth={1.5} className="icon" />}
                 options={[
                   {
                     subTitle: userData?.name,
@@ -85,7 +86,7 @@ const Header = () => {
               />
             ) : (
               <Link to="/login">
-                <UserIcon className="icon" />
+                <User strokeWidth={1.5} className="icon" />
               </Link>
               // <DropdownButton
               //   buttonContent={<UserIcon className="icon" />}

@@ -101,7 +101,7 @@ const ProductDetail = () => {
               </div>
 
               <Button
-                className="w-full h-full bg-black text-white hover:bg-black"
+                className="w-full h-full bg-[#852623] text-[#f5f6dc] hover:bg-[#852623]"
                 onClick={handleAddToCart}
               >
                 ADD TO CART
