@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { WishIcon } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { goToPageByName, goToPageByNameWithId } from "@/utils/RouterUtil";
-
+import { auth } from "@/lib/firebase";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { resetQuantity, setPrice } from "@/routes/store/productStore";
 import { useProductDetail } from "../hooks/useProductDetail";
@@ -13,6 +13,7 @@ import ProductInfo from "../components/ProductInfo";
 import { addItem, saveCartItem } from "@/routes/store/cartStore";
 import { saveWishItem } from "@/routes/store/wishStore";
 import WishButton from "@/components/Button/WishButton";
+import { toast } from "sonner";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,7 +27,7 @@ const ProductDetail = () => {
   const dispatch = useAppDispatch();
 
   const quantity = useAppSelector((state) => state.product.quantity);
-
+  const cartItems = useAppSelector((state) => state.cart.items);
   useEffect(() => {
     // 페이지 들어올 때마다 초기화
     dispatch(resetQuantity());
@@ -48,6 +49,28 @@ const ProductDetail = () => {
   dispatch(setPrice(product.price));
 
   const handleAddToCart = () => {
+    // 1. 로그인 안 되어 있으면 로그인 페이지로 이동
+    if (!auth.currentUser) {
+      alert("Please sign in to use the cart list.");
+      navigate("/login"); // 또는 "/signin" 등 당신 로그인 페이지 경로
+      return;
+    }
+
+    const isAlreadyInCart = cartItems.some(
+      (item) => item.product.id === product.id && item.quantity === quantity,
+    );
+
+    if (isAlreadyInCart) {
+      toast("This item is already in your Bag.", {
+        position: "bottom-center",
+        action: {
+          label: "View",
+          onClick: () => navigate("/cart"),
+        },
+      });
+      return;
+    }
+
     dispatch(
       saveCartItem({
         product: {
@@ -61,7 +84,13 @@ const ProductDetail = () => {
         selected: true,
       }),
     );
-    console.log("qe", quantity);
+    toast("Item added to Bag.", {
+      position: "bottom-center",
+      action: {
+        label: "View",
+        onClick: () => navigate("/cart"),
+      },
+    });
     // 카트 페이지로 이동
     // goToPageByName(navigate, "cart");
   };

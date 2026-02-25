@@ -8,7 +8,7 @@ const Home = () => {
     <div>
       <BannerList slides={slides} interval={5000} />
       <ProductList />
-      <div className="content">ddddd</div>
+      {/* <div className="content">ddddd</div> */}
     </div>
   );
 };

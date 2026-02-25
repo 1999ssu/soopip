@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SheetClose } from "@/components/ui/sheet";
+import { Plus } from "lucide-react";
 
 interface Address {
   id: string;
@@ -39,14 +40,17 @@ const EditAddressList = ({
 }: EditAddressListProps) => {
   return (
     <BasicSheetLayout
-      title="EDIT MY ADDRESS"
+      showTitle={false}
       showFooter={true}
       footerContent={
-        <div className="flex gap-4">
-          <Button variant="outline" className="flex-1" onClick={onBackClick}>
-            Add new address
-          </Button>
-          <SheetClose>
+        <div className="w-full flex gap-4">
+          <div className="flex-1 border text-center  border-[#852623] text-[#852623]">
+            <Button variant="outline" className="flex-1" onClick={onBackClick}>
+              <Plus />
+              Add New Address22
+            </Button>
+          </div>
+          <SheetClose className="bg-[#852623] text-[#f5f6dc]">
             <Button className="flex-1" onClick={onSave}>
               Save
             </Button>
@@ -77,7 +81,7 @@ const EditAddressList = ({
               >
                 {addr.info.firstName} {addr.info.lastName}
                 {addr.id === defaultAddressId && (
-                  <span className="ml-3 inline-block bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
+                  <span className="ml-3 inline-block bg-[#852623] text-[#f5f6dc] text-xs px-2 py-1 rounded">
                     Default
                   </span>
                 )}
@@ -99,7 +103,12 @@ const EditAddressList = ({
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => onEdit(addr.id)}
+                  className="border-solid border-[1px] border-[#852623] bg-[#f5f6dc] text-[#852623] text-xs px-2 rounded"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onEdit(addr.id);
+                  }}
                 >
                   Edit
                 </Button>
@@ -109,6 +118,7 @@ const EditAddressList = ({
                   <Button
                     size="sm"
                     variant="destructive"
+                    className="border-solid border-[1px] border-[#852623] bg-[#f5f6dc] text-[#852623] text-xs px-2 rounded"
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();

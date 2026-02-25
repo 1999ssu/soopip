@@ -15,16 +15,16 @@ export default function SignUp() {
     navigate("/");
   };
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
+    <div className="flex flex-col items-center justify-center  ">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow-md w-80"
+        className="bg-white p-8 rounded-xl shadow-md w-80 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
       >
-        <h1 className="text-2xl font-semibold mb-4 text-center">회원가입</h1>
+        <h1 className="text-2xl font-semibold mb-4 text-center">SIGN UP</h1>
 
         <input
           type="text"
-          placeholder="이름"
+          placeholder="Enter Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="border rounded w-full p-2 mb-3"
@@ -33,7 +33,7 @@ export default function SignUp() {
 
         <input
           type="email"
-          placeholder="이메일"
+          placeholder="Enter Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="border rounded w-full p-2 mb-3"
@@ -42,7 +42,7 @@ export default function SignUp() {
 
         <input
           type="password"
-          placeholder="비밀번호"
+          placeholder="Enter Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="border rounded w-full p-2 mb-4"
@@ -53,16 +53,16 @@ export default function SignUp() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-black text-white w-full py-2 rounded hover:bg-gray-800"
+          className="bg-[#852623] text-[#f5f6dc] w-full py-2 rounded hover:bg-[#852623]"
         >
-          {loading ? "회원가입 중..." : "회원가입"}
+          {loading ? "회원가입 중..." : "CREATE ACCOUNT"}
         </button>
 
-        <div className="text-sm text-center mt-3">
+        {/* <div className="text-sm text-center mt-3">
           <Link to="/login" className="text-blue-500 hover:underline">
             로그인으로 이동
           </Link>
-        </div>
+        </div> */}
       </form>
     </div>
   );

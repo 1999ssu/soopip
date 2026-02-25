@@ -94,4 +94,5 @@
   height: 500px;
   transform: translateX(-50%);
   background: #f5f6dc;
+  z-index: -1;
 }

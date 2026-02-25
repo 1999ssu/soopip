@@ -16,12 +16,12 @@ const WishButton = ({ product }: { product: Product }) => {
   const wishlistItems = useAppSelector((state) => state.wish.items);
 
   const isInWishlist = wishlistItems.some(
-    (item) => item.product.id === product.id
+    (item) => item.product.id === product.id,
   );
   const toggleWishlist = () => {
     // 1. 로그인 안 되어 있으면 로그인 페이지로 이동
     if (!auth.currentUser) {
-      alert("로그인 후 위시리스트를 사용할 수 있습니다.");
+      alert("Please sign in to use the wish list.");
       navigate("/login"); // 또는 "/signin" 등 당신 로그인 페이지 경로
       return;
     }

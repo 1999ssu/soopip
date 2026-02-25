@@ -15,7 +15,7 @@ const InfoFields: React.FC<Props> = ({ infoComponents, handleInfoChange }) => (
       <Input
         value={infoComponents.firstName}
         onChange={(e) => handleInfoChange("firstName", e.target.value)}
-        placeholder="Enter your first name."
+        placeholder="Enter Your First Name."
         required
       />
     </Field>
@@ -24,24 +24,23 @@ const InfoFields: React.FC<Props> = ({ infoComponents, handleInfoChange }) => (
       <Input
         value={infoComponents.lastName}
         onChange={(e) => handleInfoChange("lastName", e.target.value)}
-        placeholder="Enter your last name."
+        placeholder="Enter Your Last Name."
         required
       />
     </Field>
-    <div className="grid grid-cols-2 gap-4 items-end">
-      <Field>
-        <FieldLabel>Phone Number</FieldLabel>
-        <Input disabled placeholder="+1" />
-      </Field>
-      <Field>
+    <Field>
+      <FieldLabel>Phone Number</FieldLabel>
+      <div className="flex gap-2">
+        <Input disabled placeholder="+1" className="w-[50px]" />
         <Input
           value={infoComponents.phoneNum}
           onChange={(e) => handleInfoChange("phoneNum", e.target.value)}
-          placeholder="Please enter your mobile phone"
+          placeholder="Enter Your Mobile Phone"
           required
         />
-      </Field>
-    </div>
+      </div>
+    </Field>
+    {/* <Field></Field> */}
   </>
 );
 

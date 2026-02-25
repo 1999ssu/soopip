@@ -69,10 +69,13 @@ const AddressFields: React.FC<Props> = ({
         value={selected.components.state}
         onValueChange={(val) => handleEditableChange("state", val)}
       >
-        <SelectTrigger id="checkout-state">
+        <SelectTrigger
+          id="checkout-state"
+          className="border-solid border-[#852623]"
+        >
           <SelectValue placeholder="Select state" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-white">
           {canadianProvinces.map((prov) => (
             <SelectItem key={prov.code} value={prov.name}>
               {prov.name}

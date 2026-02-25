@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { formatPrice } from "@/utils/formatPrice";
 import { auth } from "@/lib/firebase";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const WishDetail = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +25,7 @@ const WishDetail = () => {
 
   //1.19 추가
   const { items: wishItems, loading: wishLoading } = useAppSelector(
-    (state) => state.wish
+    (state) => state.wish,
   );
 
   // 로그인 상태일 때 위시리스트 자동 불러오기
@@ -58,7 +60,7 @@ const WishDetail = () => {
           product: item.product,
           quantity: item.quantity,
           selected: false,
-        })
+        }),
       );
       // 위시리스트에서는 삭제하지 않음
     });
@@ -68,19 +70,29 @@ const WishDetail = () => {
     <div className="flex flex-col gap-6 p-4">
       {/* 상단 선택/삭제 */}
       <div className="flex items-center gap-2">
-        <input
-          type="checkbox"
+        <Checkbox
+          id="wish-products"
+          className="border-solid border-[#852623] w-[18px] h-[18px]"
           checked={allSelected}
-          onChange={() =>
+          onCheckedChange={() =>
             allSelected ? dispatch(deselectAll()) : dispatch(selectAll())
           }
         />
-        Select All
-        <button onClick={() => dispatch(deleteSelectedWishItems())}>
-          Delete Selected
-        </button>
-        <Button onClick={moveAllToCart} className="ml-4">
-          선택 상품 전체 장바구니 이동
+        <Label
+          htmlFor="wish-products"
+          className="text-base font-medium cursor-pointer"
+        >
+          Select All
+        </Label>
+
+        <Button
+          className="text-base font-medium p-0"
+          onClick={() => dispatch(deleteSelectedWishItems())}
+        >
+          Select Remove
+        </Button>
+        <Button onClick={moveAllToCart} className="text-base font-medium p-0">
+          Add All To Cart
         </Button>
       </div>
 
@@ -91,10 +103,12 @@ const WishDetail = () => {
           className="flex items-center justify-between border-b pb-4"
         >
           <div className="flex gap-4 items-center">
-            <input
-              type="checkbox"
+            <Checkbox
+              className="border-solid border-[#852623] w-[18px] h-[18px]"
               checked={item.selected}
-              onChange={() => dispatch(toggleSelectItem(item.product.id))}
+              onCheckedChange={() =>
+                dispatch(toggleSelectItem(item.product.id))
+              }
             />
             <img
               src={item.product.thumbnailImageUrl}
@@ -106,37 +120,33 @@ const WishDetail = () => {
               <p>{formatPrice(item.product.price)}</p>
             </div>
           </div>
-
-          {/* 삭제 */}
-          <div className="flex items-center gap-2">
+          <div className="flex">
+            {/* 개별 장바구니 이동 버튼 */}
             <Button
-              variant="outline"
-              size="icon"
-              onClick={() => dispatch(removeWishItem(item.product.id))}
+              className="add-to-cart-button bg-[#852623] text-[#f5f6dc] hover:bg-[#852623]"
+              onClick={() => {
+                dispatch(
+                  saveCartItem({
+                    product: item.product,
+                    quantity: 1,
+                    selected: false,
+                  }),
+                );
+              }}
             >
-              <Trash2 />
+              ADD TO CART
             </Button>
-          </div>
 
-          {/* 개별 장바구니 이동 버튼 */}
-          <Button
-            className="add-to-cart-button"
-            onClick={() => {
-              console.log(
-                "위시 → 장바구니 이동 시도 - 상품 ID:",
-                item.product.id
-              );
-              dispatch(
-                saveCartItem({
-                  product: item.product,
-                  quantity: 1,
-                  selected: false,
-                })
-              );
-            }}
-          >
-            장바구니에 담기
-          </Button>
+            {/* 삭제 */}
+            <div className="flex items-center gap-2">
+              <Button
+                size="icon"
+                onClick={() => dispatch(removeWishItem(item.product.id))}
+              >
+                <Trash2 strokeWidth={1.5} />
+              </Button>
+            </div>
+          </div>
         </div>
       ))}
 

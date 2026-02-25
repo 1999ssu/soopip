@@ -30,13 +30,13 @@ const DropdownButton = ({
   width,
 }: DropdownButtonProps) => {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button className="p-0">{buttonContent}</Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className={`bg-white ${width ?? "w-56"}`}
+        className={`bg-white ${width ?? "w-56"} qqqq`}
         align="start"
       >
         {options.map((group) => (
@@ -44,7 +44,11 @@ const DropdownButton = ({
             <DropdownMenuLabel>{group.subTitle}</DropdownMenuLabel>
 
             {group.items.map((item) => (
-              <DropdownMenuItem key={item.label} onClick={item.onClick}>
+              <DropdownMenuItem
+                className="cursor-pointer data-[highlighted]:bg-[#f5f6dc]"
+                key={item.label}
+                onClick={item.onClick}
+              >
                 <span>{item.label}</span>
                 {item.shortcut && (
                   <span className="ml-auto opacity-50">{item.shortcut}</span>

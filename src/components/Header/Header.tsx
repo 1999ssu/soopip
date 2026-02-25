@@ -28,14 +28,26 @@ const Header = () => {
     <header className="header_wrap">
       <div className="header">
         <div className="top flex flex-row items-center">
-          <Link to="/products" className="icon">
+          {/* <Link to="/products" className="icon">
             <Search strokeWidth={1.5} />
-          </Link>
+          </Link> */}
           <div className="logo">
             <Link to="/">Soopip로고자리</Link>
           </div>
           <div className="flex flex-row gap-6 items-center">
-            <Link to="/wish" className="icon">
+            {/* <Link to="/wish" className="icon">
+              {hasItems ? <WishActiveIcon /> : <WishIcon />}
+            </Link> */}
+            <Link
+              to={user ? "/wish" : "/login"}
+              className="icon"
+              onClick={(e) => {
+                if (!user) {
+                  e.preventDefault();
+                  navigate("/login");
+                }
+              }}
+            >
               {hasItems ? <WishActiveIcon /> : <WishIcon />}
             </Link>
             <Link to="/cart" className="icon">
@@ -103,7 +115,7 @@ const Header = () => {
             )}
           </div>
         </div>
-        <nav className="nav bottom">
+        {/* <nav className="nav bottom">
           <ul>
             <li>
               <Link to="/">ALL</Link>
@@ -115,7 +127,7 @@ const Header = () => {
               <Link to="/">NEW</Link>
             </li>
           </ul>
-        </nav>
+        </nav> */}
       </div>
     </header>
   );

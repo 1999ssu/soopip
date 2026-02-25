@@ -4,7 +4,8 @@ import { FieldGroup, FieldLegend, FieldSet } from "../ui/field";
 import { SheetFooter } from "../ui/sheet";
 
 interface BasicSheetLayoutProps {
-  title: string;
+  title?: string;
+  showTitle?: boolean;
   text?: string;
   children: ReactNode;
   showFooter?: boolean;
@@ -13,6 +14,7 @@ interface BasicSheetLayoutProps {
 
 const BasicSheetLayout = ({
   title,
+  showTitle,
   text,
   children,
   showFooter = false,
@@ -21,8 +23,8 @@ const BasicSheetLayout = ({
   return (
     <div className="w-full max-w-md">
       <form>
-        <FieldSet>
-          <FieldLegend>{title}</FieldLegend>
+        <FieldSet className="mt-5">
+          {showTitle && <FieldLegend>{title}</FieldLegend>}
           <FieldGroup>{children}</FieldGroup>
           {/* showFooter가 true일 때만 Footer 렌더링 */}
           {showFooter && (

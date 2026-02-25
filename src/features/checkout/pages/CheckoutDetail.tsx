@@ -109,7 +109,11 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
   const { subTotal, shipping, tax, total, totalQty } =
     calculateOrderSummary(items);
 
-  const [mode, setMode] = useState<"add" | "edit">("add");
+  type Mode = "add" | "edit" | "editDetail";
+  const [mode, setMode] = useState<Mode>("add");
+
+  console.log("mode::", mode);
+
   const goToAdd = () => {
     setMode("add");
     setEditingAddressId(null); // ← 이거 추가! (중요!!)
@@ -200,7 +204,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
 
     // 필수 필드 검사
     if (!info?.firstName || !info?.lastName || !info?.phoneNum) {
-      alert("이름, 성, 전화번호는 필수입니다.");
+      alert("Name, and Phone Number are required fields.");
       return;
     }
     if (
@@ -236,7 +240,8 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
       dispatch(confirmAddress());
 
       setEditingAddressId(null);
-      setAddressFormOpen(false);
+      setMode("edit"); // 저장 후 주소 리스트 화면으로 이동
+      // setAddressFormOpen(false);
     } catch (error) {
       alert("주소 저장에 실패했습니다.");
     }
@@ -246,8 +251,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
 
   const handleCheckout = async () => {
     if (!userInfo.name || !userData.email || !userInfo.fullAddress) {
-      // return alert("이름, 이메일, 주소는 필수입니다.");
-      return console.log("이름,이메일,주소는 필수입니다.");
+      return console.log("Name, Email, and Address are required fields.");
     }
 
     setLoading(true);
@@ -298,7 +302,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
             <FieldGroup>
               <Field>
                 <FieldLabel className="text-lg font-bold">
-                  Shipping address
+                  Shipping Address
                 </FieldLabel>
                 <Sheet
                   open={addressFormOpen}
@@ -314,14 +318,14 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                   {addresses.length === 0 ? (
                     // 1. 주소 없을 때: Add 버튼 (기존 그대로)
                     <SheetTrigger asChild>
-                      <Button className="w-full h-[100px] flex flex-col justify-center bg-[#f8f9fa] border-[#e7e9ec] hover:bg-gray-100">
-                        <PlusIcon className="w-6 h-6 mb-2" />
-                        <span>Add new address</span>
-                      </Button>
+                      <div className="w-full h-[100px] flex flex-col items-center justify-center border border-[#852623] hover:bg-[#f5f6dc] cursor-pointer">
+                        <PlusIcon className="w-6 h-6 " />
+                        <span>Add New Address</span>
+                      </div>
                     </SheetTrigger>
                   ) : (
                     // 주소 있을 때: 카드는 그냥 표시용, "Edit" 문구만 트리거
-                    <div className="relative w-full h-[100px] bg-[#f8f9fa] border border-[#e7e9ec] rounded-md p-4 flex justify-between items-center">
+                    <div className="relative w-full h-[100px] bg-[#f5f6dc] border border-[#852623] rounded-md p-4 flex justify-between items-center">
                       {/* 주소 정보 표시 (클릭 안 됨) */}
                       <div className="flex flex-col justify-between h-full pr-20">
                         {/* Edit 공간 확보 */}
@@ -331,7 +335,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                               {displayAddress.info.firstName}{" "}
                               {displayAddress.info.lastName}
                               {displayAddress.id === defaultAddressId && (
-                                <span className="ml-3 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                                <span className="ml-3 text-xs bg-[#852623] text-[#f5f6dc] px-2 py-1 rounded">
                                   Default
                                 </span>
                               )}
@@ -357,7 +361,8 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                       <SheetTrigger asChild>
                         <button
                           type="button"
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none"
+                          className="text-sm font-medium text-[#852623] hover:text-[#852623]
+                           border-[#852623] focus:outline-none"
                           onClick={() => {
                             const defaultAddr =
                               addresses.find(
@@ -373,29 +378,12 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                       </SheetTrigger>
                     </div>
                   )}
-                  <SheetContent className="bg-white overflow-y-auto">
+                  <SheetContent className="bg-[#f5f6dc] overflow-y-auto">
                     {/* <SheetTitle>Add new Address</SheetTitle> */}
                     <SheetTitle>
                       {mode === "add" ? "ADD NEW ADDRESS" : "EDIT MY ADDRESS"}
                     </SheetTitle>
-                    {mode === "add" ? (
-                      <AddressForm
-                        ref={formRef}
-                        initialData={
-                          editingAddressId
-                            ? addresses.find(
-                                (a) => a.id === editingAddressId,
-                              ) || null
-                            : null
-                        }
-                        isDefault={
-                          editingAddressId
-                            ? addresses.find((a) => a.id === editingAddressId)
-                                ?.id === defaultAddressId
-                            : false
-                        }
-                      />
-                    ) : (
+                    {mode === "edit" ? (
                       <EditAddressList
                         addresses={addresses}
                         defaultAddressId={defaultAddressId}
@@ -403,8 +391,8 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                         // onSelect={setSelectedAddressId} // radio
                         onSelect={(id) => dispatch(setSelectedAddress(id))}
                         onEdit={(id) => {
+                          setMode("editDetail");
                           setEditingAddressId(id);
-                          setMode("add");
                         }}
                         // onDelete={(id) => {
                         //   setAddresses((prev) =>
@@ -416,7 +404,6 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                         //     setSelectedAddressId(null);
                         // }}
                         onDelete={(id) => {
-                          console.log("작동됨");
                           dispatch(deleteUserAddress(id));
                         }}
                         onBackClick={goToAdd}
@@ -435,17 +422,38 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                           setAddressFormOpen(false);
                         }}
                       />
+                    ) : (
+                      <AddressForm
+                        ref={formRef}
+                        initialData={
+                          editingAddressId
+                            ? addresses.find(
+                                (a) => a.id === editingAddressId,
+                              ) || null
+                            : null
+                        }
+                        isDefault={
+                          editingAddressId
+                            ? addresses.find((a) => a.id === editingAddressId)
+                                ?.id === defaultAddressId
+                            : false
+                        }
+                      />
                     )}
                     {/* <AddressForm ref={formRef} /> */}
-                    <SheetFooter>
-                      {mode === "add" && (
-                        <Button type="button" onClick={handleAddressClick}>
+                    <SheetFooter className="mt-5 bg-[#852623] text-[#f5f6dc]">
+                      {(mode === "add" || mode === "editDetail") && (
+                        <Button
+                          className="w-full"
+                          type="button"
+                          onClick={handleAddressClick}
+                        >
                           {editingAddressId ? "Save Changes" : "Add Address"}
                         </Button>
                       )}
-                      <SheetClose asChild>
-                        <Button variant="outline">Close</Button>
-                      </SheetClose>
+                      {/* <SheetClose asChild>
+                        <Button variant="outline">Close22</Button>
+                      </SheetClose> */}
                     </SheetFooter>
                   </SheetContent>
                 </Sheet>
@@ -457,7 +465,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                 <Accordion
                   type="single"
                   collapsible
-                  className="w-full border border-solid border-[#e7e9ec] p-5"
+                  className="w-full border border-solid border-[#852623] p-5"
                   defaultValue="item-1"
                   value={openItem}
                   onValueChange={setOpenItem}
@@ -514,7 +522,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
           </form>
         </div>
         <div className="w-5/12 flex-1 mt-6">
-          <Card className="shadow-none rounded-[4px] border-[#e7e9ec]">
+          <Card className="shadow-none rounded-[0px] border-[#852623]">
             <CardHeader>
               <CardTitle className="text-xl text-center justify-between">
                 Order Summary
@@ -547,7 +555,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
           <button
             onClick={handleCheckout}
             disabled={loading}
-            className="w-full h-[48px] bg-black text-white p-2 relative top-[75px]"
+            className="w-full h-[48px] bg-[#852623] text-[#f5f6dc] hover:bg-[#852623] p-2 relative top-[75px]"
           >
             PLACE ORDER
           </button>

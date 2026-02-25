@@ -31,11 +31,11 @@ const AddressForm = forwardRef(
       isDefault: propIsDefault,
       onDefaultChange,
     }: AddressFormProps,
-    ref
+    ref,
   ) => {
     const [detailQuery, setDetailQuery] = useState(initialData?.detail || "");
     const [infoComponents, setInfoComponents] = useState<InfoComponent>(
-      initialData?.info || { firstName: "", lastName: "", phoneNum: "" }
+      initialData?.info || { firstName: "", lastName: "", phoneNum: "" },
     );
     const [isDefault, setIsDefault] = useState(false);
 
@@ -84,8 +84,7 @@ const AddressForm = forwardRef(
         <form>
           <FieldGroup>
             <FieldSet>
-              <FieldLegend>SETTING ADDRESS</FieldLegend>
-              <FieldGroup>
+              <FieldGroup className="mt-5">
                 <InfoFields
                   infoComponents={infoComponents}
                   handleInfoChange={handleInfoChange}
@@ -108,6 +107,7 @@ const AddressForm = forwardRef(
               </FieldGroup>
               <div className="mt-8 flex items-center space-x-2">
                 <Checkbox
+                  className="border-solid border-[#852623] w-[22px] h-[22px]"
                   id="default-address"
                   checked={isDefault}
                   onCheckedChange={(checked) => {
@@ -138,7 +138,7 @@ const AddressForm = forwardRef(
       </div> */}
       </div>
     );
-  }
+  },
 );
 AddressForm.displayName = "AddressForm";
 export default AddressForm;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Login() {
   const { user, login, loading, error } = useAuth();
@@ -22,15 +23,15 @@ export default function Login() {
     }
   };
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
+    <div className="flex flex-col items-center justify-center ">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow-md w-80"
+        className="bg-white p-8 rounded-xl shadow-md w-80 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
       >
-        <h1 className="text-2xl font-semibold mb-4 text-center">로그인</h1>
+        <h1 className="text-2xl font-semibold mb-4 text-center">LOGIN</h1>
         <input
           type="email"
-          placeholder="이메일"
+          placeholder="Enter Your Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="border rounded w-full p-2 mb-3"
@@ -38,7 +39,7 @@ export default function Login() {
         />
         <input
           type="password"
-          placeholder="비밀번호"
+          placeholder="Enter Your Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="border rounded w-full p-2 mb-4"
@@ -48,17 +49,17 @@ export default function Login() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-black text-white w-full py-2 rounded hover:bg-gray-800"
+          className="flex justify-center bg-[#852623] text-[#f5f6dc]  w-full py-2 rounded hover:bg-[#852623]"
         >
-          {loading ? "로그인 중..." : "로그인"}
+          {loading ? <Spinner className="m-" /> : "LOGIN"}
         </button>
         <div className="text-sm text-center mt-3">
-          <Link to="/signup" className="text-blue-500 hover:underline">
-            회원가입
+          <Link to="/signup" className="text-[#852623] hover:underline">
+            SIGN UP
           </Link>
-          <Link to="/reset" className="text-blue-500 hover:underline">
+          {/* <Link to="/reset" className="text-blue-500 hover:underline">
             비밀번호 재설정
-          </Link>
+          </Link> */}
         </div>
       </form>
     </div>

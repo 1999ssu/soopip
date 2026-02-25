@@ -18,6 +18,8 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/lib/firebase";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const CartDetail = () => {
   const dispatch = useAppDispatch();
@@ -57,7 +59,7 @@ const CartDetail = () => {
       }));
 
     if (selectedItems.length === 0) {
-      return alert("선택된 상품이 없습니다.");
+      return alert("No Items Selected.");
     }
     setLoadingCheckout(true);
     // Checkout 페이지로 이동, items state 전달
@@ -68,18 +70,27 @@ const CartDetail = () => {
 
   return (
     <div className="flex flex-col gap-6 p-4">
-      <div>
-        <input
-          type="checkbox"
+      <div className="flex items-center gap-2">
+        <Checkbox
+          id="select-products"
+          className="border-solid border-[#852623] w-[18px] h-[18px]"
           checked={allSelected}
-          onChange={() =>
+          onCheckedChange={() =>
             allSelected ? dispatch(deselectAll()) : dispatch(selectAll())
           }
         />
-        Select All
-        <button onClick={() => dispatch(deleteSelectedCartItems())}>
-          Delete Selected
-        </button>
+        <Label
+          htmlFor="select-products"
+          className="text-base font-medium cursor-pointer"
+        >
+          Select All
+        </Label>
+        <Button
+          className="text-base font-medium p-0"
+          onClick={() => dispatch(deleteSelectedCartItems())}
+        >
+          Select Remove
+        </Button>
       </div>
 
       {cartItems.map((item) => (
@@ -88,10 +99,12 @@ const CartDetail = () => {
           className="flex items-center justify-between border-b pb-4"
         >
           <div className="flex gap-4 items-center">
-            <input
-              type="checkbox"
+            <Checkbox
+              className="border-solid border-[#852623] w-[18px] h-[18px]"
               checked={item.selected}
-              onChange={() => dispatch(toggleSelectItem(item.product.id))}
+              onCheckedChange={() =>
+                dispatch(toggleSelectItem(item.product.id))
+              }
             />
             <img
               src={item.product.thumbnailImageUrl}
@@ -105,25 +118,23 @@ const CartDetail = () => {
           </div>
 
           <div className="flex items-center gap-2">
+            <div className="flex items-center border">
+              <Button
+                size="icon"
+                onClick={() => dispatch(decrement(item.product.id))}
+                disabled={item.quantity === 1}
+              >
+                <Minus />
+              </Button>
+              <span>{item.quantity}</span>
+              <Button
+                size="icon"
+                onClick={() => dispatch(increment(item.product.id))}
+              >
+                <Plus />
+              </Button>
+            </div>
             <Button
-              variant="outline"
-              size="icon"
-              onClick={() => dispatch(decrement(item.product.id))}
-              disabled={item.quantity === 1}
-            >
-              <Minus />
-            </Button>
-            <span>{item.quantity}</span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => dispatch(increment(item.product.id))}
-            >
-              <Plus />
-            </Button>
-
-            <Button
-              variant="outline"
               size="icon"
               onClick={() => dispatch(removeCartItem(item.product.id))}
             >
@@ -144,7 +155,7 @@ const CartDetail = () => {
         <Button
           onClick={handleCheckout}
           disabled={loadingCheckout}
-          className="bg-black text-white"
+          className="bg-[#852623] text-[#f5f6dc] hover:bg-[#852623]"
         >
           {loadingCheckout ? "결제 중..." : "결제하기"}
         </Button>
