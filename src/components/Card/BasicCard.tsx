@@ -12,12 +12,12 @@ const BasicCard = ({
       className={`card ${onClick ? "cursor-pointer" : ""}`}
       onClick={onClick}
     >
-      <div className="img_box">
+      <div className="img_box bg-white">
         <img src={thumbnailImageUrl} />
         {children}
       </div>
       <div className="text_wrap flex_column gap_10">
-        <p className="basic_sub_title">{title}</p>
+        <p className="basic_sub_title line-clamp-2 leading-[normal]">{title}</p>
         <p className="bold_font basic_sub_title">{subTitle}</p>
       </div>
     </div>

@@ -24,7 +24,7 @@ export const ProductImages = ({
             <TabsTrigger
               key={idx}
               value={img}
-              className="w-[62px] h-[72px] p-0"
+              className="w-[62px] h-[72px] p-0 bg-white sssss"
             >
               <img
                 src={img}
@@ -40,7 +40,7 @@ export const ProductImages = ({
         {images.map((img, idx) => (
           <div
             key={idx}
-            className={`${
+            className={`bg-white ${
               img === activeTab ? "block" : "hidden"
             } w-[500px] h-[600px]`}
           >
