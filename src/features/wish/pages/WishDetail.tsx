@@ -110,11 +110,13 @@ const WishDetail = () => {
                 dispatch(toggleSelectItem(item.product.id))
               }
             />
-            <img
-              src={item.product.thumbnailImageUrl}
-              alt={item.product.name}
-              className="w-24 h-24 object-cover"
-            />
+            <div className="bg-white">
+              <img
+                src={item.product.thumbnailImageUrl}
+                alt={item.product.name}
+                className="w-24 h-24 object-contain"
+              />
+            </div>
             <div>
               <h3 className="font-bold">{item.product.name}</h3>
               <p>{formatPrice(item.product.price)}</p>

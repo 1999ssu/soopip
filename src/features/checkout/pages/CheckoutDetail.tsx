@@ -485,12 +485,14 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                         {openItem !== "item-1" && (
                           <div className="mt-5 grid grid-cols-[repeat(5,40px)] gap-2 height-[50px]">
                             {items.map((item) => (
-                              <img
-                                className="w-full h-full"
-                                key={item.id}
-                                src={item.imageUrl}
-                                alt={item.name}
-                              />
+                              <div className="bg-white">
+                                <img
+                                  className="w-full h-full"
+                                  key={item.id}
+                                  src={item.imageUrl}
+                                  alt={item.name}
+                                />
+                              </div>
                             ))}
                           </div>
                         )}
@@ -500,7 +502,7 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                       {items.map((item) => (
                         <div key={item.id} className="flex justify-between">
                           <div className="flex gap-4">
-                            <p className="w-[40px] h-[50px]">
+                            <p className="w-[40px] h-[50px] bg-white">
                               <img src={item.imageUrl} alt={item.name} />
                             </p>
                             <p className="flex flex-col justify-center">

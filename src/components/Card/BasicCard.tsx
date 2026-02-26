@@ -13,7 +13,7 @@ const BasicCard = ({
       onClick={onClick}
     >
       <div className="img_box bg-white">
-        <img src={thumbnailImageUrl} />
+        <img src={thumbnailImageUrl} className="object-contain" />
         {children}
       </div>
       <div className="text_wrap flex_column gap_10">
