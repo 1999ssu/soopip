@@ -47,7 +47,7 @@ const EditAddressList = ({
           <div className="flex-1 border text-center  border-[#852623] text-[#852623]">
             <Button variant="outline" className="flex-1" onClick={onBackClick}>
               <Plus />
-              Add New Address22
+              Add New Address
             </Button>
           </div>
           <SheetClose className="bg-[#852623] text-[#f5f6dc]">

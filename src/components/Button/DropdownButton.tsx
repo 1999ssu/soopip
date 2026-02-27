@@ -36,8 +36,9 @@ const DropdownButton = ({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className={`bg-white ${width ?? "w-56"} qqqq`}
+        className={`bg-white min-w[var(--radix-dropdown-menu-trigger-width)] ${width ?? "w-56"}`}
         align="start"
+        sideOffset={4}
       >
         {options.map((group) => (
           <DropdownMenuGroup key={group.subTitle}>

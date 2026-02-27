@@ -22,7 +22,7 @@ const AddressSearchFields: React.FC<Props> = ({
   handleSelect,
   loading,
 }) => (
-  <Field className="relative ssss">
+  <Field className="relative">
     <FieldLabel>Search address</FieldLabel>
     <InputGroup>
       <InputGroupInput
