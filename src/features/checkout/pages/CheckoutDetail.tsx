@@ -39,6 +39,7 @@ import EditAddressList from "../components/EditAddressList";
 import { auth } from "@/lib/firebase";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { calculateOrderSummary, roundToCent } from "@/utils/formatPrice";
+import { Spinner } from "@/components/ui/spinner";
 
 interface CartItem {
   id: string;
@@ -315,20 +316,25 @@ const CheckoutDetail = ({ items }: CheckoutFormProps) => {
                     }
                   }}
                 >
-                  {addresses.length === 0 ? (
-                    // 1. 주소 없을 때: Add 버튼 (기존 그대로)
+                  {addressLoading ? (
+                    <div className="w-full h-[100px] flex items-center justify-center bg-[#f5f6dc] border border-[#852623] rounded-md">
+                      <Spinner className="w-8 h-8 text-[#852623]" />
+                      <span className="ml-3 text-[#852623]">
+                        Loading addresses...
+                      </span>
+                    </div>
+                  ) : addresses.length === 0 ? (
+                    // 주소 없을 때: Add 버튼
                     <SheetTrigger asChild>
                       <div className="w-full h-[100px] flex flex-col items-center justify-center border border-[#852623] hover:bg-[#f5f6dc] cursor-pointer">
-                        <PlusIcon className="w-6 h-6 " />
+                        <PlusIcon className="w-6 h-6" />
                         <span>Add New Address</span>
                       </div>
                     </SheetTrigger>
                   ) : (
-                    // 주소 있을 때: 카드는 그냥 표시용, "Edit" 문구만 트리거
+                    // 주소 있을 때: 주소 카드
                     <div className="relative w-full h-[100px] bg-[#f5f6dc] border border-[#852623] rounded-md p-4 flex justify-between items-center">
-                      {/* 주소 정보 표시 (클릭 안 됨) */}
                       <div className="flex flex-col justify-between h-full pr-20">
-                        {/* Edit 공간 확보 */}
                         {displayAddress && (
                           <>
                             <p className="font-semibold">

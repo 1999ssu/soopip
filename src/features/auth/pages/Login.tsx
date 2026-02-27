@@ -51,7 +51,7 @@ export default function Login() {
           disabled={loading}
           className="flex justify-center bg-[#852623] text-[#f5f6dc]  w-full py-2 rounded hover:bg-[#852623]"
         >
-          {loading ? <Spinner className="m-" /> : "LOGIN"}
+          {loading ? <Spinner /> : "LOGIN"}
         </button>
         <div className="text-sm text-center mt-3">
           <Link to="/signup" className="text-[#852623] hover:underline">

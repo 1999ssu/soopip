@@ -6,6 +6,7 @@ import {
   InputGroupAddon,
 } from "@/components/ui/input-group";
 import { SearchIcon } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Props {
   query: string;
@@ -28,18 +29,20 @@ const AddressSearchFields: React.FC<Props> = ({
       <InputGroupInput
         value={query}
         onChange={(e) => handleChange(e.target.value)}
-        placeholder="Search..."
+        placeholder="Search Address"
         required
       />
       <InputGroupAddon>
-        <SearchIcon />
+        {loading ? (
+          <div style={{ position: "absolute", right: "16px", top: "18px" }}>
+            <Spinner />
+          </div>
+        ) : (
+          <SearchIcon />
+        )}
       </InputGroupAddon>
     </InputGroup>
-    {loading && (
-      <div style={{ position: "absolute", right: "16px", top: "18px" }}>
-        검색 중...
-      </div>
-    )}
+
     {suggestions.length > 0 && (
       <div
         style={{
