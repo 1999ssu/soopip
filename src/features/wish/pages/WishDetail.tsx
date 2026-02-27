@@ -49,7 +49,7 @@ const WishDetail = () => {
   const allSelected =
     wishItems.length > 0 && wishItems.every((item) => item.selected);
 
-  if (wishItems.length === 0) return <div>위시리스트가 비어 있습니다.</div>;
+  if (wishItems.length === 0) return <div>This wishlist is empty.</div>;
 
   // 선택된 전체 위시리스트 아이템 장바구니 이동 (위시리스트 유지)
   const moveAllToCart = () => {

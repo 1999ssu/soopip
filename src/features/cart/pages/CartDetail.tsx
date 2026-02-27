@@ -66,7 +66,7 @@ const CartDetail = () => {
     navigate("/checkout", { state: { items: selectedItems } });
   };
 
-  if (cartItems.length === 0) return <div>장바구니가 비어 있습니다.</div>;
+  if (cartItems.length === 0) return <div>This cartlist is empty.</div>;
 
   return (
     <div className="flex flex-col gap-6 p-4">
