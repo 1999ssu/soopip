@@ -1,19 +1,14 @@
-import React, { useEffect } from "react";
-import "./header.css";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  UserIcon,
-  CartIcon,
-  SearchIcon,
-  WishIcon,
-  WishActiveIcon,
-} from "@/assets/icons";
+import { WishIcon, WishActiveIcon } from "@/assets/icons";
 import { useAppSelector } from "@/hooks/hooks";
 import { selectCartCount } from "@/routes/store/cartStore";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { ShoppingCart, User } from "lucide-react";
+import { Logo } from "@/assets/images";
 import DropdownButton from "../Button/DropdownButton";
-import { Search, ShoppingCart, User } from "lucide-react";
+import "./header.css";
 const Header = () => {
   const wishItems = useAppSelector((state) => state.wish.items);
 
@@ -31,8 +26,10 @@ const Header = () => {
           {/* <Link to="/products" className="icon">
             <Search strokeWidth={1.5} />
           </Link> */}
-          <div className="logo">
-            <Link to="/">Soopip로고자리</Link>
+          <div className="w-[140px]">
+            <Link to="/">
+              <img src={Logo} />
+            </Link>
           </div>
           <div className="flex flex-row gap-6 items-center">
             {/* <Link to="/wish" className="icon">

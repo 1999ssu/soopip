@@ -1,5 +1,5 @@
 // src/features/wish/pages/WishDetail.tsx
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/hooks/hooks";
 import { saveCartItem } from "@/routes/store/cartStore";
 import {
@@ -20,10 +20,6 @@ import { Label } from "@/components/ui/label";
 const WishDetail = () => {
   const dispatch = useAppDispatch();
 
-  //1.19 주석
-  // const wishItems = useAppSelector((state) => state.wish.items);
-
-  //1.19 추가
   const { items: wishItems, loading: wishLoading } = useAppSelector(
     (state) => state.wish,
   );
@@ -34,7 +30,6 @@ const WishDetail = () => {
       dispatch(loadUserWish());
     }
   }, [dispatch]);
-  ////////////////////////////////////////////////
 
   useEffect(() => {
     return () => {
@@ -82,14 +77,13 @@ const WishDetail = () => {
           htmlFor="wish-products"
           className="text-base font-medium cursor-pointer"
         >
-          Select All
+          Select All |
         </Label>
-
         <Button
           className="text-base font-medium p-0"
           onClick={() => dispatch(deleteSelectedWishItems())}
         >
-          Select Remove
+          Select Remove |
         </Button>
         <Button onClick={moveAllToCart} className="text-base font-medium p-0">
           Add All To Cart

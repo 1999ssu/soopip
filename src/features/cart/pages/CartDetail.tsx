@@ -4,12 +4,9 @@ import { formatPrice } from "@/utils/formatPrice";
 import {
   increment,
   decrement,
-  removeItem,
   deselectAll,
   selectAll,
-  deleteSelected,
   toggleSelectItem,
-  loadUserCart,
   removeCartItem,
   deleteSelectedCartItems,
 } from "@/routes/store/cartStore";
@@ -17,9 +14,9 @@ import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "@/lib/firebase";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
 
 const CartDetail = () => {
   const dispatch = useAppDispatch();
@@ -53,7 +50,7 @@ const CartDetail = () => {
       .map((item) => ({
         id: item.product.id,
         name: item.product.name,
-        price: Math.floor(item.product.price * 100), // 센트 단위
+        price: Math.floor(item.product.price * 100),
         quantity: item.quantity,
         imageUrl: item.product.thumbnailImageUrl,
       }));
@@ -62,7 +59,7 @@ const CartDetail = () => {
       return alert("No Items Selected.");
     }
     setLoadingCheckout(true);
-    // Checkout 페이지로 이동, items state 전달
+    // go to Checkout page, items state 전달
     navigate("/checkout", { state: { items: selectedItems } });
   };
 
@@ -83,7 +80,7 @@ const CartDetail = () => {
           htmlFor="select-products"
           className="text-base font-medium cursor-pointer"
         >
-          Select All
+          Select All |
         </Label>
         <Button
           className="text-base font-medium p-0"
@@ -159,7 +156,7 @@ const CartDetail = () => {
           disabled={loadingCheckout}
           className="bg-[#852623] text-[#f5f6dc] hover:bg-[#852623]"
         >
-          {loadingCheckout ? "결제 중..." : "결제하기"}
+          {loadingCheckout ? <Spinner /> : "Proceed to checkout"}
         </Button>
       </div>
     </div>

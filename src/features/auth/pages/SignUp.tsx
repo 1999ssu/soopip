@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function SignUp() {
   const { signUp, loading, error } = useAuth();
@@ -55,14 +56,8 @@ export default function SignUp() {
           disabled={loading}
           className="bg-[#852623] text-[#f5f6dc] w-full py-2 rounded hover:bg-[#852623]"
         >
-          {loading ? "회원가입 중..." : "CREATE ACCOUNT"}
+          {loading ? <Spinner /> : "CREATE ACCOUNT"}
         </button>
-
-        {/* <div className="text-sm text-center mt-3">
-          <Link to="/login" className="text-blue-500 hover:underline">
-            로그인으로 이동
-          </Link>
-        </div> */}
       </form>
     </div>
   );
