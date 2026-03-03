@@ -6,6 +6,11 @@ export { stripeWebhook } from "./webhooks";
 
 const corsHandler = cors({ origin: true });
 
+const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://soopip.web.app"
+    : "http://localhost:5173";
+
 interface CartItem {
   id: string;
   name: string;
@@ -101,8 +106,8 @@ export const createCheckoutSession = functions.https.onRequest((req, res) => {
           // order_items: JSON.stringify(items),
           item_ids: items.map((i) => i.id).join(","),
         },
-        success_url: "http://localhost:5173/success",
-        cancel_url: "http://localhost:5173/cancel",
+        success_url: `${BASE_URL}/success`,
+        cancel_url: `${BASE_URL}/cancel`,
       });
 
       return res.status(200).json({ url: session.url });
