@@ -1,4 +1,4 @@
-import WishDetail from "./wishDetail";
+import WishDetail from "./WishDetail";
 
 const WishList = () => {
   return (
