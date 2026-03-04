@@ -10,7 +10,8 @@
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["vite/client", "node", "google.maps"]
+    "types": ["vite/client", "node", "google.maps"],
+    "noEmit": true
   },
   "include": [
     "src",
